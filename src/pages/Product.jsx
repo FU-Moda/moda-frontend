@@ -102,7 +102,7 @@ const Product = () => {
                 </div>
               </div>
             </div>
-            <RatingComponent />
+            <RatingComponent id={id} />
           </div>
         </>
       )}

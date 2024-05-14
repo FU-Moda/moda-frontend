@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getRatingByProductId } from "../../api/productApi";
 
-const RatingComponent = () => {
+const RatingComponent = ({ id }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-
+  const [imageFile, setImageFile] = useState(null);
+  const [ratings, setRatings] = useState([]);
   const handleRatingChange = (value) => {
     setRating(value);
   };
@@ -12,35 +14,29 @@ const RatingComponent = () => {
     setComment(e.target.value);
   };
 
-  const fakeReviews = [
-    {
-      rating: 5,
-      comment:
-        "Sản phẩm tuyệt vời, chất lượng rất tốt. Tôi rất hài lòng với đơn hàng này.",
-      user: "Nguyễn Văn A",
-    },
-    {
-      rating: 4,
-      comment:
-        "Giao hàng nhanh chóng, đóng gói cẩn thận. Tuy nhiên, kích thước hơi nhỏ so với mong đợi.",
-      user: "Trần Thị B",
-    },
-    {
-      rating: 3,
-      comment:
-        "Sản phẩm tương đối ổn, nhưng có một số điểm cần cải thiện về chất lượng.",
-      user: "Lê Văn C",
-    },
-  ];
+  const handleImageChange = (e) => {
+    setImageFile(e.target.files[0]);
+  };
+
+  const fetchData = async () => {
+    const data = await getRatingByProductId(id, 1, 10);
+    console.log(data);
+    if (data.isSuccess) {
+      setRatings(data.result?.items);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, [id]);
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-4">
-      <h3 className="text-lg font-semibold mb-2">Đánh giá sản phẩm</h3>
-      <div className="flex items-center mb-2">
+    <div className="bg-white rounded-lg shadow-lg p-6">
+      <h3 className="text-xl font-semibold mb-4">Đánh giá sản phẩm</h3>
+      <div className="flex items-center mb-4">
         {[1, 2, 3, 4, 5].map((value) => (
           <span
             key={value}
-            className={`text-2xl cursor-pointer ${
+            className={`text-3xl cursor-pointer transition-colors duration-300 ${
               value <= rating ? "text-yellow-500" : "text-gray-300"
             }`}
             onClick={() => handleRatingChange(value)}
@@ -50,36 +46,97 @@ const RatingComponent = () => {
         ))}
       </div>
       <textarea
-        className="w-full border border-gray-300 rounded-md p-2 mb-2"
+        className="w-full border border-gray-300 rounded-md p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
         rows={4}
         placeholder="Nhập đánh giá của bạn..."
         value={comment}
         onChange={handleCommentChange}
       />
+      <label className="form-control w-full max-w-xs">
+        <div className="label">
+          <span className="label-text">Pick a file</span>
+        </div>
+        <input
+          type="file"
+          onChange={handleImageChange}
+          className="file-input file-input-bordered w-full max-w-xs"
+        />
+      </label>
+
+      {imageFile && (
+        <div className="mb-4 w-40 h-40">
+          <img
+            src={URL.createObjectURL(imageFile)}
+            alt="Preview"
+            className="max-w-full h-full rounded-md shadow-md"
+          />
+        </div>
+      )}
       <button
-        className="bg-primary text-white px-4 py-2 rounded-md hover:bg-mainColor transition-colors duration-300"
+        className="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         disabled={rating === 0 || comment.trim() === ""}
       >
         Gửi đánh giá
       </button>
 
-      <div className="mt-4">
-        <h4 className="text-lg font-semibold mb-2">
+      <div className="mt-8">
+        <h4 className="text-xl font-semibold mb-4">
           Đánh giá từ khách hàng khác
         </h4>
-        {fakeReviews.map((review, index) => (
-          <div key={index} className="bg-gray-100 p-4 rounded-md mb-2">
-            <div className="flex items-center mb-2">
-              {[...Array(review.rating)].map((_, i) => (
-                <span key={i} className="text-lg text-yellow-500">
-                  &#9733;
+        {ratings &&
+          ratings.length > 0 &&
+          ratings.map((review, index) => (
+            <div
+              key={index}
+              className="bg-gray-100 p-6 rounded-md mb-4 shadow-md transition-transform duration-300 hover:scale-105"
+            >
+              <div className="flex items-center mb-4">
+                <img
+                  src={
+                    review.rating?.createByAccount.avatarUrl ||
+                    "https://via.placeholder.com/50"
+                  }
+                  alt="User"
+                  className="w-10 h-10 rounded-full mr-4"
+                />
+                <span className="font-semibold">
+                  {review.rating?.createByAccount?.firstName}{" "}
+                  {review.rating?.createByAccount?.lastName}
                 </span>
-              ))}
+                {[...Array(review.rating.ratingPoint)].map((_, i) => (
+                  <span key={i} className="text-xl text-yellow-500 ml-2">
+                    &#9733;
+                  </span>
+                ))}
+              </div>
+              <div className="flex mb-2">
+                <strong className="mr-2">Sản phẩm:</strong>
+                <p className="text-gray-600">
+                  {review.rating?.title || "Không có tên sản phẩm"}
+                </p>
+              </div>
+              <div className="flex mb-2">
+                <strong className="mr-2">Đánh giá vào lúc:</strong>
+                <p className="text-gray-600">
+                  {new Date(review.rating?.createDate).toLocaleString()}
+                </p>
+              </div>
+              <div className="flex mb-4">
+                <strong className="mr-2">Nội dung:</strong>
+                <p className="text-gray-700">{review.rating?.content}</p>
+              </div>
+              <div className="flex flex-wrap">
+                {review.image.map((img, i) => (
+                  <img
+                    key={i}
+                    src={img.url}
+                    alt="Product"
+                    className="max-w-full h-auto mr-2 mb-2 rounded-md shadow-md"
+                  />
+                ))}
+              </div>
             </div>
-            <p className="text-gray-700 mb-2">{review.comment}</p>
-            <p className="text-gray-600 text-sm">-- {review.user}</p>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );

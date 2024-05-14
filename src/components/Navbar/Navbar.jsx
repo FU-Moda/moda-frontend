@@ -23,7 +23,7 @@ const NavBar = () => {
 
   return (
     <div
-      className={`w-full  transition-all duration-300 z-10 ${
+      className={`w-full fixed transition-all duration-300 z-10 ${
         isFixed ? "bg-white shadow-xl py-2 " : "bg-white shadow-md py-4"
       }`}
     >
