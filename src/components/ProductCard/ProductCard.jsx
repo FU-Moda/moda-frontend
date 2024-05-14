@@ -27,7 +27,7 @@ const ProductCard = ({ title, productItem }) => {
       <img
         loading="lazy"
         onClick={handleClick}
-        src={productItem.staticFile?.img}
+        src={productItem.staticFile[0]?.img}
         alt=""
         className="w-full h-48 object-contain cursor-pointer"
       />
@@ -56,7 +56,7 @@ const ProductCard = ({ title, productItem }) => {
         <div className="flex justify-between items-center mt-2">
           <h4 className="font-bold">
             {" "}
-            {formatPrice(productItem.productStock?.price)}
+            {formatPrice(productItem.productStock[0]?.price)}
           </h4>
           <button
             aria-label="Add"
