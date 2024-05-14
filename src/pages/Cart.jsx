@@ -25,7 +25,7 @@ const Cart = () => {
       <div className="grid grid-cols-1 md:grid-cols-2gap-8">
         <div className="md:col-span-3">
           {cartList.length === 0 && (
-            <h1 className="text-2xl font-bold">No Items are added to Cart</h1>
+            <h1 className="text-2xl font-bold">Không tồn tại sản phẩm nào</h1>
           )}
           {cartList.map((item) => {
             const productQty = item.productStock?.price * item.qty;
@@ -82,9 +82,9 @@ const Cart = () => {
           })}
         </div>
         <div className="bg-gray-100 p-4 rounded-md shadow-md">
-          <h2 className="text-xl font-bold mb-4">Cart Summary</h2>
+          <h2 className="text-xl font-bold mb-4">Giỏ hàng</h2>
           <div className="flex justify-between items-center mb-4">
-            <h4 className="font-bold">Total Price:</h4>
+            <h4 className="font-bold">Tổng tiền:</h4>
             <h3 className="text-xl font-bold">{formatPrice(totalPrice)}</h3>
           </div>
         </div>

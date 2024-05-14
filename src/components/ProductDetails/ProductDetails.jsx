@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { addToCart } from "../../app/features/cart/cartSlice";
-import { formatPrice } from "../../utils/Util";
+import { formatPrice } from "../../utils/util";
 
 const ProductDetails = ({ selectedProduct }) => {
   const dispatch = useDispatch();
