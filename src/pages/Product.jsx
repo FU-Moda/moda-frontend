@@ -3,7 +3,7 @@ import Banner from "../components/Banner/Banner";
 import { Container } from "react-bootstrap";
 import ShopList from "../components/ShopList";
 import { products } from "../utils/products";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import ProductDetails from "../components/ProductDetails/ProductDetails";
 import ProductReviews from "../components/ProductReviews/ProductReviews";
 import useWindowScrollToTop from "../hooks/useWindowScrollToTop";
@@ -47,14 +47,15 @@ const Product = () => {
               <div class="flex-grow">
                 <div class="flex justify-between items-center mb-2">
                   <h3 class="text-lg font-semibold">LeMode</h3>
-                  <a
-                    href="#"
-                    class="text-sm text-blue-500 hover:text-blue-700 font-semibold"
+                  <NavLink
+                    to={`/shop-detail/${selectedProduct?.product?.shopId}`}
                   >
                     Xem Shop
-                  </a>
+                  </NavLink>
                 </div>
-                <p class="text-gray-600 mb-2">Shop chuyên quần áo 2nd</p>
+                <p class="text-gray-600 mb-2">
+                  {selectedProduct?.product?.shop?.name}
+                </p>
                 <div class="flex items-center mb-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +70,7 @@ const Product = () => {
                     />
                   </svg>
                   <span class="text-gray-600">
-                    Lê Văn Việt, Thành phố Thủ Đức
+                    {selectedProduct?.product?.shop?.address}
                   </span>
                 </div>
                 <div class="flex items-center">

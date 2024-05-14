@@ -3,7 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const NavBar = () => {
-  // const { cartList } = useSelector((state) => state.cart);
+  const { cartList } = useSelector((state) => state.cart);
   const [expand, setExpand] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
 
@@ -23,7 +23,7 @@ const NavBar = () => {
 
   return (
     <div
-      className={`w-full fixed transition-all duration-300 z-10 ${
+      className={`w-full  transition-all duration-300 z-10 ${
         isFixed ? "bg-white shadow-xl py-2 " : "bg-white shadow-md py-4"
       }`}
     >
@@ -33,7 +33,7 @@ const NavBar = () => {
           className="flex items-center gap-2 no-underline text-primary"
         >
           {/* <ion-icon name="bag" className="text-2xl"></ion-icon> */}
-          <span className="text-2xl font-medium">Moda</span>
+          <span className="text-2xl font-medium">MODA</span>
         </NavLink>
 
         <div className="hidden md:flex items-center gap-4">

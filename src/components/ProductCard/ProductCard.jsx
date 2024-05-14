@@ -12,8 +12,14 @@ const ProductCard = ({ title, productItem }) => {
     router(`/shop/${productItem.product.id}`);
   };
 
-  const handleAdd = (productItem) => {
-    dispatch(addToCart({ product: productItem, num: 1 }));
+  const handleAdd = (productItem, productStock) => {
+    dispatch(
+      addToCart({
+        productItem: productItem,
+        productStock: productStock,
+        num: 1,
+      })
+    );
     toast.success("Product has been added to cart!");
   };
 
@@ -62,7 +68,7 @@ const ProductCard = ({ title, productItem }) => {
             aria-label="Add"
             type="submit"
             className="bg-[#0f3460] text-white flex items-center justify-center w-8 h-8 rounded-full hover:bg-[#0c2c4d] transition-colors duration-300"
-            onClick={() => handleAdd(productItem)}
+            onClick={() => handleAdd(productItem, productItem.productStock[0])}
           >
             <i class="fa-solid fa-plus"></i>
           </button>

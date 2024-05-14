@@ -14,45 +14,84 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const productToAdd = action.payload.product;
-      const quantity = action.payload.num;
-    
-      const productExit = state.cartList.find(
-        (item) => item.product?.id === productToAdd?.product?.id
+      const productItem = action.payload.productItem;
+      const productStock = action.payload.productStock;
+      const num = action.payload.num;
+
+      const existingItem = state.cartList.find(
+        (item) =>
+          item.productStock.productId === productStock.productId &&
+          ((item.productStock.clothingSize &&
+            item.productStock.clothingSize === productStock.clothingSize) ||
+            (item.productStock.shoeSize &&
+              item.productStock.shoeSize === productStock.shoeSize))
       );
-      console.log(productExit)
-      if (productExit) {
+
+      if (existingItem) {
         state.cartList = state.cartList.map((item) =>
-          item.product?.id === productExit.product?.id
-            ? { ...productExit, qty: productExit.qty + action.payload.num }
+          item.productStock.productId === existingItem.productStock.productId &&
+          ((item.productStock.clothingSize &&
+            item.productStock.clothingSize ===
+              existingItem.productStock.clothingSize) ||
+            (item.productStock.shoeSize &&
+              item.productStock.shoeSize ===
+                existingItem.productStock.shoeSize))
+            ? {
+                ...existingItem,
+                quantity: existingItem.quantity + num,
+              }
             : item
         );
       } else {
-        state.cartList.push({ ...productToAdd, qty: quantity });
+        state.cartList.push({ productItem, productStock, quantity: num });
       }
     },
     decreaseQty: (state, action) => {
-      const productTodecreaseQnty = action.payload;
-      const productExit = state.cartList.find(
-        (item) => item.product?.id === productTodecreaseQnty?.product?.id
+      const productItem = action.payload.productItem;
+      const productStock = action.payload.productStock;
+      const num = action.payload.num;
+      const existingItem = state.cartList.find(
+        (item) =>
+          item.productStock.productId === productStock.productId &&
+          ((item.productStock.clothingSize &&
+            item.productStock.clothingSize === productStock.clothingSize) ||
+            (item.productStock.shoeSize &&
+              item.productStock.shoeSize === productStock.shoeSize))
       );
-      console.log(productExit)
-      if (productExit.qty === 1) {
-        state.cartList = state.cartList.filter(
-          (item) => item.product?.id !== productExit?.product?.id
+
+      if (existingItem.quantity === 1) {
+        state.cartList = state.cartList.filter((item) =>
+          item.productStock.productId === productStock.productId &&
+          ((item.productStock.clothingSize &&
+            item.productStock.clothingSize === productStock.clothingSize) ||
+            (item.productStock.shoeSize &&
+              item.productStock.shoeSize === productStock.shoeSize))
+            ? item
+            : null
         );
       } else {
         state.cartList = state.cartList.map((item) =>
-          item.product?.id === productExit?.product?.id
-            ? { ...productExit, qty: productExit.qty - 1 }
+          item.productStock.productId === productStock.productId &&
+          ((item.productStock.clothingSize &&
+            item.productStock.clothingSize === productStock.clothingSize) ||
+            (item.productStock.shoeSize &&
+              item.productStock.shoeSize === productStock.shoeSize))
+            ? { ...existingItem, quantity: existingItem.quantity - 1 }
             : item
         );
       }
     },
     deleteProduct: (state, action) => {
-      const productToDelete = action.payload;
+      const productItem = action.payload.productItem;
+      const productStock = action.payload.productStock;
+      const num = action.payload.num;
       state.cartList = state.cartList.filter(
-        (item) => item.product?.id !== productToDelete.product?.id
+        (item) =>
+          item.productStock.productId !== productStock.productId ||
+          (item.productStock.clothingSize &&
+            item.productStock.clothingSize !== productStock.clothingSize &&
+            item.productStock.shoeSize &&
+            item.productStock.shoeSize !== productStock.shoeSize)
       );
     },
   },

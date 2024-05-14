@@ -28,4 +28,25 @@ const getRatingByProductId = async (id, pageNumber, pageSize) => {
     return data.data;
   } catch (error) {}
 };
-export { getAllProduct, getProductById, getRatingByProductId };
+
+const getShopById = async (id) => {
+  try {
+    const data = await axios.get(`${baseUrl}/get-shop-by-id/${id}`);
+    return data.data;
+  } catch (error) {}
+};
+const getProductByShopId = async (id, pageNumber, pageSize) => {
+  try {
+    const data = await axios.get(
+      `${baseUrl}/product/get-product-by-shop-id/${id}/${pageNumber}/${pageSize}`
+    );
+    return data.data;
+  } catch (error) {}
+};
+export {
+  getAllProduct,
+  getProductById,
+  getRatingByProductId,
+  getShopById,
+  getProductByShopId,
+};

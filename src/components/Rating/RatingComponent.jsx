@@ -73,7 +73,7 @@ const RatingComponent = ({ id }) => {
         </div>
       )}
       <button
-        className="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="mt-10 bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         disabled={rating === 0 || comment.trim() === ""}
       >
         Gửi đánh giá

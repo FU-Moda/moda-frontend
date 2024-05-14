@@ -14,19 +14,39 @@ const ProductDetails = ({ selectedProduct }) => {
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState({});
+  const [stock, setStock] = useState({});
 
   const handleQuantityChange = (e) => {
     setQuantity(e.target.value);
   };
-
   const handleSizeChange = (e) => {
     setSelectedSize(e.target.value);
   };
+
+  console.log(stock);
   useEffect(() => {
     getSelectedPrice();
+    setStock(
+      selectedProduct.productStock?.filter(
+        (item) => item.clothingSize == Number(selectedSize)
+      )[0]
+    );
   }, [selectedSize]);
-  const handleAdd = (selectedProduct, quantity) => {
-    dispatch(addToCart({ product: selectedProduct, num: quantity }));
+
+  const handleAdd = (productItem, productStock, quantity) => {
+    console.log(selectedSize);
+    console.log({
+      productItem: productItem,
+      productStock: productStock,
+      num: quantity,
+    });
+    dispatch(
+      addToCart({
+        productItem: productItem,
+        productStock: productStock,
+        num: quantity,
+      })
+    );
     toast.success("Product has been added to cart!");
   };
   const renderSizeOptions = () => {
@@ -172,7 +192,7 @@ const ProductDetails = ({ selectedProduct }) => {
             aria-label="Add"
             type="submit"
             className="bg-[#0f3460] mx-8 text-white px-4 py-2 rounded-md hover:bg-[#0c2c4d] transition-colors duration-300"
-            onClick={() => handleAdd(selectedProduct, quantity)}
+            onClick={() => handleAdd(selectedProduct, stock, quantity)}
           >
             Thêm vào giỏ hàng
           </button>

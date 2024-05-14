@@ -5,6 +5,7 @@ import Cart from "../pages/Cart";
 import Home from "../pages/Home";
 import Product from "../pages/Product";
 import Shop from "../pages/Shop";
+import ShopProductList from "../pages/ProductShop/ShopProductList";
 const ProtectedRouteAuth = ({ children }) => {
   const user = useSelector(selectUser);
   if (!user) {
@@ -50,6 +51,7 @@ function Routers() {
         { path: "/cart", element: <Cart /> },
         { path: "/shop", element: <Shop /> },
         { path: "/shop/:id", element: <Product /> },
+        { path: "/shop-detail/:id", element: <ShopProductList /> },
       ],
     },
   ]);
