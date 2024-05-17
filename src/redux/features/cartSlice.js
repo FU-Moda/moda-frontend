@@ -90,7 +90,7 @@ export const cartSlice = createSlice({
       });
     },
     deleteCart: (state) => {
-      state.cartItems = [];
+      state.cartList = [];
     },
   },
 });
@@ -104,6 +104,7 @@ export const cartMiddleware = (store) => (next) => (action) => {
   return result;
 };
 
-export const { addToCart, decreaseQty, deleteProduct } = cartSlice.actions;
+export const { addToCart, decreaseQty, deleteProduct, deleteCart } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;

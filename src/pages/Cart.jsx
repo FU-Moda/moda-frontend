@@ -9,6 +9,7 @@ import { formatPrice } from "../utils/util";
 import { clothingSizeLabels, shoeSizeLabels } from "../utils/constant";
 import { createOrderWithPayment } from "../api/orderApi";
 import { toast } from "react-toastify";
+import { deleteCart } from "../redux/features/cartSlice";
 
 const Cart = () => {
   const { cartList } = useSelector((state) => state.cart);
@@ -39,8 +40,7 @@ const Cart = () => {
     });
     if (response.isSuccess) {
       toast.success("Đặt hàng thành công");
-      useDispatch(deleteCart());
-
+      dispatch(deleteCart());
       window.location.href = response.result;
     } else {
       toast.error("Đặt hàng thất bại");
