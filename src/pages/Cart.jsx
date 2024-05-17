@@ -7,6 +7,8 @@ import {
 } from "../app/features/cart/cartSlice";
 import { formatPrice } from "../utils/util";
 import { clothingSizeLabels, shoeSizeLabels } from "../utils/constant";
+import { createOrderWithPayment } from "../api/orderApi";
+import { toast } from "react-toastify";
 
 const Cart = () => {
   const { cartList } = useSelector((state) => state.cart);
@@ -21,6 +23,29 @@ const Cart = () => {
     window.scrollTo(0, 0);
   }, []);
   console.log(cartList);
+  const checkOut = async () => {
+    const productStockDtos = cartList.map((item) => ({
+      id: item.productStock.id,
+      quantity: item.quantity,
+    }));
+
+    console.log({
+      accountId: "7679876c-7414-44ba-aff6-960fe6739c05",
+      productStockDtos,
+    });
+    const response = await createOrderWithPayment({
+      accountId: "7679876c-7414-44ba-aff6-960fe6739c05",
+      productStockDtos,
+    });
+    if (response.isSuccess) {
+      toast.success("Đặt hàng thành công");
+      useDispatch(deleteCart());
+
+      window.location.href = response.result;
+    } else {
+      toast.error("Đặt hàng thất bại");
+    }
+  };
   return (
     <div className="container mx-auto py-8">
       <div className="grid grid-cols-1 md:grid-cols-2gap-8">
@@ -90,8 +115,8 @@ const Cart = () => {
                       onClick={() =>
                         dispatch(
                           decreaseQty({
-                            productItem: item.productItem,
-                            productStock: item.productStock,
+                            productItem: item?.productItem,
+                            productStock: item?.productStock,
                             num: 1,
                           })
                         )
@@ -101,7 +126,11 @@ const Cart = () => {
                     </button>
                     <button
                       className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                      onClick={() => dispatch(deleteProduct(item.productStock))}
+                      onClick={() =>
+                        dispatch(
+                          deleteProduct({ productStock: item.productStock })
+                        )
+                      }
                     >
                       X
                     </button>
@@ -118,6 +147,14 @@ const Cart = () => {
             <h3 className="text-xl font-bold">{formatPrice(totalPrice)}</h3>
           </div>
         </div>
+      </div>
+      <div className="flex justify-end">
+        <button
+          className="bg-primary text-white text-end px-4 py-2 mt-4 rounded-md shadow-md"
+          onClick={checkOut}
+        >
+          Đặt hàng
+        </button>
       </div>
     </div>
   );

@@ -26,9 +26,12 @@ const ProductDetails = ({ selectedProduct }) => {
   console.log(stock);
   useEffect(() => {
     getSelectedPrice();
+
     setStock(
       selectedProduct.productStock?.filter(
-        (item) => item.clothingSize == Number(selectedSize)
+        (item) =>
+          (item.clothingSize && item.clothingSize === Number(selectedSize)) ||
+          (item.shoeSize && item.shoeSize === Number(selectedSize))
       )[0]
     );
   }, [selectedSize]);
