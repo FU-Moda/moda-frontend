@@ -20,16 +20,11 @@ const ProductCard = ({ title, productItem }) => {
         num: 1,
       })
     );
-    toast.success("Product has been added to cart!");
+    toast.success("Sản phẩm đã được thêm vào giỏ hàng");
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md relative mb-4">
-      {title === "Big Discount" && (
-        <span className="absolute top-0 left-0 bg-[#0f3460] text-white px-2 py-1 rounded-full m-2 text-sm">
-          {productItem.discount}% Off
-        </span>
-      )}
+    <div className="bg-white p-4 rounded-lg shadow-md relative mb-4 border">
       <img
         loading="lazy"
         onClick={handleClick}
@@ -38,10 +33,7 @@ const ProductCard = ({ title, productItem }) => {
         className="w-full h-48 object-contain cursor-pointer"
       />
       <div className="absolute top-0 right-0 m-2 opacity-0 transition-opacity duration-300 hover:opacity-100">
-        <ion-icon
-          name="heart-outline"
-          className="text-2xl text-gray-500 cursor-pointer"
-        ></ion-icon>
+        <i className="fa-solid fa-heart text-red-800"></i>
       </div>
       <div className="mt-2">
         <h3
@@ -52,26 +44,33 @@ const ProductCard = ({ title, productItem }) => {
         </h3>
         <div className="flex items-center mt-1">
           {[...Array(5)].map((_, index) => (
-            <ion-icon
+            <i
               key={index}
-              name="star"
-              className="text-yellow-300 text-base"
-            ></ion-icon>
+              class="fa-solid fa-star text-yellow-300 text-base"
+            ></i>
           ))}
         </div>
         <div className="flex justify-between items-center mt-2">
-          <h4 className="font-bold">
+          <h4 className="font-bold text-red-600">
             {" "}
             {formatPrice(productItem.productStock[0]?.price)}
+          </h4>
+          <h4 className="line-through font-bold text-grey-600">
+            {" "}
+            {formatPrice((productItem.productStock[0]?.price * 120) / 100)}
           </h4>
           <button
             aria-label="Add"
             type="submit"
-            className="bg-[#0f3460] text-white flex items-center justify-center w-8 h-8 rounded-full hover:bg-[#0c2c4d] transition-colors duration-300"
+            className="bg-primary text-white flex items-center justify-center w-8 h-8 rounded-full hover:bg-[#0c2c4d] transition-colors duration-300"
             onClick={() => handleAdd(productItem, productItem.productStock[0])}
           >
-            <i class="fa-solid fa-plus"></i>
+            <i className="fa-solid fa-plus"></i>
           </button>
+        </div>
+        <div className="flex items-center text-green-700">
+          <i class="fa-solid fa-truck-fast"></i>
+          <h4 className="mx-2">Miễn phí giao hàng 5 km</h4>
         </div>
       </div>
     </div>

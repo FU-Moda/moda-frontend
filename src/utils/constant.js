@@ -57,4 +57,18 @@ const shoeSizeLabels = {
   19: "EU_445",
   20: "EU_45",
 };
-export { clothTypeLabels, genderLabels, clothingSizeLabels, shoeSizeLabels };
+const orderLabels = {
+  0: "Chờ xác nhận",
+  1: "Đang chuẩn bị",
+  2: "Đang giao hàng",
+  3: "Đã giao hàng",
+  4: "Thất bại",
+  5: "Trả hàng",
+};
+export {
+  clothTypeLabels,
+  genderLabels,
+  clothingSizeLabels,
+  shoeSizeLabels,
+  orderLabels,
+};

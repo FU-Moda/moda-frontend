@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
-
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../redux/features/authSlice";
+import { toast } from "react-toastify";
+import { decode } from "../../utils/jwtUtil";
 const NavBar = () => {
-  const { cartList } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [expand, setExpand] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
-
+  const [roleName, setRoleName] = useState(null);
   // fixed Header
   function scrollHandler() {
     if (window.scrollY >= 100) {
@@ -15,12 +18,22 @@ const NavBar = () => {
       setIsFixed(false);
     }
   }
-
+  useEffect(() => {
+    if (localStorage.getItem("accessToken")) {
+      setRoleName(decode(localStorage.getItem("accessToken")).role);
+    }
+  }, [localStorage.getItem("accessToken")]);
   useEffect(() => {
     window.addEventListener("scroll", scrollHandler);
     return () => window.removeEventListener("scroll", scrollHandler);
-  }, []);
+  }, [user]);
 
+  const handleLogOut = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    dispatch(logout());
+    toast.success("Đăng xuất thành công");
+  };
   return (
     <div
       className={`w-full  transition-all duration-300 z-10 ${
@@ -51,13 +64,6 @@ const NavBar = () => {
           >
             Sản phẩm
           </NavLink>
-          <NavLink
-            to="/cart"
-            className="text-base font-semibold hover:text-gray-500 no-underline text-primary"
-            onClick={() => setExpand(false)}
-          >
-            Giỏ hàng
-          </NavLink>
         </div>
 
         <div className="flex items-center gap-4">
@@ -66,39 +72,67 @@ const NavBar = () => {
               className="text-gray-500 hover:text-gray-700 focus:outline-none "
               onClick={() => setExpand(!expand)}
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
+              <i className="fa-solid fa-bars"></i>{" "}
             </button>
           </div>
 
-          <Link to="/cart" className=" no-underline text-primary">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-6 h-6 text-gray-500 hover:text-gray-700"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
+          <Link
+            to="/cart"
+            className="hidden md:block no-underline text-primary"
+          >
+            <i className="fa-solid fa-cart-shopping"></i>
           </Link>
+          {user ? (
+            <>
+              <div className="dropdown dropdown-end">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className=" cursor-pointer m-1 text-primary"
+                >
+                  <i class="fa-solid fa-user"></i>
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                  <li>
+                    <a>Tài khoản</a>
+                  </li>
+                  {roleName === "isAdmin" ? (
+                    <NavLink to="/admin">
+                      <li>
+                        <span>Trang quản trị</span>
+                      </li>
+                    </NavLink>
+                  ) : roleName === "isStaff" ? (
+                    <NavLink to="/staff">
+                      <li>
+                        <span>Trang quản trị</span>
+                      </li>
+                    </NavLink>
+                  ) : roleName === "isShop" ? (
+                    <NavLink to="/management-shop">
+                      <li>
+                        <span>Trang quản trị</span>
+                      </li>
+                    </NavLink>
+                  ) : null}
+
+                  <li onClick={handleLogOut}>
+                    <a>Đăng xuất</a>
+                  </li>
+                </ul>
+              </div>
+            </>
+          ) : (
+            <Link
+              to="/login"
+              className="hidden md:block no-underline text-primary"
+            >
+              <i className="fa-solid fa-user"></i>
+            </Link>
+          )}
         </div>
       </div>
 

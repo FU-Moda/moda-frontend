@@ -1,7 +1,7 @@
 import axios from "axios";
 import { baseUrl } from "./config";
 
-const createOrderWithPayment = async (data) => {
+export const createOrderWithPayment = async (data) => {
   try {
     const response = await axios.post(
       `${baseUrl}/order/create-order-with-payment`,
@@ -10,4 +10,12 @@ const createOrderWithPayment = async (data) => {
     return response.data;
   } catch (error) {}
 };
-export { createOrderWithPayment };
+
+export const getAllOrderByShopId = async (id, pageNumber, pageSize) => {
+  try {
+    const response = await axios.get(
+      `${baseUrl}/order/get-all-order-by-shop-id/${id}?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    );
+    return response.data;
+  } catch (error) {}
+};
