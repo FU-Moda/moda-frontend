@@ -6,8 +6,8 @@ const clothTypeLabels = {
   4: "Giày",
 };
 const genderLabels = {
-  0: "Đàn ông",
-  1: "Phụ nữ",
+  0: "Nam",
+  1: "Nữ",
   2: "Unisex",
   3: "Bé trai",
   4: "Bé gái",

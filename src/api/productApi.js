@@ -20,6 +20,16 @@ const getProductById = async (id) => {
     console.log(error);
   }
 };
+const getProductStockByProductId = async (id) => {
+  try {
+    const data = await axios.get(
+      `${baseUrl}/product/get-product-stock-by-product-id/${id}`
+    );
+    return data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 const getRatingByProductId = async (id, pageNumber, pageSize) => {
   try {
     const data = await axios.get(
@@ -49,4 +59,5 @@ export {
   getRatingByProductId,
   getShopById,
   getProductByShopId,
+  getProductStockByProductId,
 };

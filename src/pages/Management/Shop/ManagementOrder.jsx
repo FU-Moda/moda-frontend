@@ -3,13 +3,13 @@ import { useSelector } from "react-redux";
 import { getAllOrderByShopId } from "../../../api/orderApi";
 import Loader from "../../../components/Loader/Loader";
 import { orderLabels } from "../../../utils/constant";
-
+import OrderModal from "../Shop/Modal/OrderModal";
 export const ManagementOrder = () => {
   const { shop } = useSelector((state) => state.shop);
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [orderDetails, setOrderDetails] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState({});
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -25,42 +25,13 @@ export const ManagementOrder = () => {
     fetchData();
   }, [shop]);
 
-  const handleExpand = (items) => {
-    setIsOpen(!isOpen);
-    setOrderDetails(items);
+  const handleExpand = (item) => {
+    setIsOpen(true);
+    setSelectedOrder(item);
   };
-
-  const renderData = () => {
-    return (
-      <div className="overflow-x-auto mt-4 shadow-4xl rounded-md">
-        <table className="table w-full table-zebra">
-          <thead className="bg-primary text-white">
-            <tr>
-              <th className="text-center">Sản phẩm</th>
-              <th className="text-center">Số lượng</th>
-              <th className="text-center">Giá</th>
-              <th className="text-center">Tổng</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orderDetails.map((orderItem) => (
-              <tr key={orderItem.id}>
-                <td className="text-center">
-                  {orderItem.productStock.product.name}
-                </td>
-                <td className="text-center">{orderItem.quantity}</td>
-                <td className="text-center">{orderItem.productStock.price}</td>
-                <td className="text-center">
-                  {orderItem.productStock.price * orderItem.quantity}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
+  const handleModalClose = () => {
+    setIsOpen(false);
   };
-
   return (
     <>
       <Loader isLoading={isLoading} />
@@ -86,7 +57,11 @@ export const ManagementOrder = () => {
             <tbody>
               {orders &&
                 orders.map((order) => (
-                  <tr key={order.order.id}>
+                  <tr
+                    key={order.order.id}
+                    onClick={() => handleExpand(order)}
+                    className="cursor-pointer"
+                  >
                     <td>{order.order.id}</td>
                     <td>{`${order.order?.account?.firstName} ${order.order?.account?.lastName}`}</td>
                     <td>{order.order?.account?.phoneNumber}</td>
@@ -98,7 +73,7 @@ export const ManagementOrder = () => {
                     <td>
                       <button
                         className="btn bg-primary text-white"
-                        onClick={() => handleExpand(order.orderDetails)}
+                        onClick={() => handleExpand(order)}
                       >
                         Chi tiết
                       </button>
@@ -107,9 +82,9 @@ export const ManagementOrder = () => {
                 ))}
             </tbody>
           </table>
-          {isOpen && renderData()}
         </div>
       )}
+      {isOpen && <OrderModal item={selectedOrder} onClose={handleModalClose} />}
     </>
   );
 };

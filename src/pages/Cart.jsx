@@ -53,6 +53,33 @@ const Cart = () => {
       {user ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2gap-8">
+            <div className="card bg-base-100 shadow-xl mb-4">
+              <div className="card-body">
+                <h2 className="card-title">Thông tin khách hàng</h2>
+                <div className="flex flex-col">
+                  <div className="flex items-center mb-2">
+                    <span className="font-semibold mr-2">Tên khách hàng:</span>
+                    <span>{`${user?.firstName} ${user.lastName}`}</span>
+                  </div>
+                  <div className="flex items-center mb-2">
+                    <span className="font-semibold mr-2">Email:</span>
+                    <span>{user.email}</span>
+                  </div>
+                  <div className="flex items-center mb-2">
+                    <span className="font-semibold mr-2">Số điện thoại:</span>
+                    <span>{user.phoneNumber}</span>
+                  </div>
+                  <div className="flex items-center mb-2">
+                    <span className="font-semibold mr-2">Giới tính:</span>
+                    <span>{user.gender ? "Nam" : "Nữ"}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="font-semibold mr-2">Địa chỉ:</span>
+                    <span>{user.address}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="md:col-span-3">
               {cartList.length === 0 && (
                 <h1 className="text-2xl font-bold">
@@ -148,6 +175,7 @@ const Cart = () => {
                 );
               })}
             </div>
+
             <div className="bg-gray-100 p-4 rounded-md shadow-md">
               <h2 className="text-xl font-bold mb-4">Giỏ hàng</h2>
               <div className="flex justify-between items-center mb-4">
@@ -156,6 +184,7 @@ const Cart = () => {
               </div>
             </div>
           </div>
+
           <div className="flex justify-end">
             <button
               className="bg-primary text-white text-end px-4 py-2 mt-4 rounded-md shadow-md"

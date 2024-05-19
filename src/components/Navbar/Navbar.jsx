@@ -1,32 +1,30 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/features/authSlice";
 import { toast } from "react-toastify";
 import { decode } from "../../utils/jwtUtil";
+
 const NavBar = () => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [expand, setExpand] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
   const [roleName, setRoleName] = useState(null);
-  // fixed Header
-  function scrollHandler() {
-    if (window.scrollY >= 100) {
-      setIsFixed(true);
-    } else if (window.scrollY <= 50) {
-      setIsFixed(false);
-    }
-  }
+
+  useEffect(() => {
+    const scrollHandler = () => {
+      setIsFixed(window.scrollY >= 100);
+    };
+    window.addEventListener("scroll", scrollHandler);
+    return () => window.removeEventListener("scroll", scrollHandler);
+  }, []);
+
   useEffect(() => {
     if (localStorage.getItem("accessToken")) {
       setRoleName(decode(localStorage.getItem("accessToken")).role);
     }
-  }, [localStorage.getItem("accessToken")]);
-  useEffect(() => {
-    window.addEventListener("scroll", scrollHandler);
-    return () => window.removeEventListener("scroll", scrollHandler);
-  }, [user]);
+  }, []);
 
   const handleLogOut = () => {
     localStorage.removeItem("accessToken");
@@ -34,6 +32,53 @@ const NavBar = () => {
     dispatch(logout());
     toast.success("Đăng xuất thành công");
   };
+
+  const renderDropDown = () => {
+    return (
+      <div className="dropdown dropdown-end">
+        <div
+          tabIndex={0}
+          role="button"
+          className="cursor-pointer m-1 text-primary"
+        >
+          <i className="fa-solid fa-user"></i>
+        </div>
+        <ul
+          tabIndex={0}
+          className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+        >
+          <li>
+            <a>Tài khoản</a>
+          </li>
+          {roleName === "isAdmin" && (
+            <NavLink to="/admin">
+              <li>
+                <span>Trang quản trị</span>
+              </li>
+            </NavLink>
+          )}
+          {roleName === "isStaff" && (
+            <NavLink to="/staff">
+              <li>
+                <span>Trang quản trị</span>
+              </li>
+            </NavLink>
+          )}
+          {roleName === "isShop" && (
+            <NavLink to="/management-shop">
+              <li>
+                <span>Trang quản trị</span>
+              </li>
+            </NavLink>
+          )}
+          <li onClick={handleLogOut}>
+            <a>Đăng xuất</a>
+          </li>
+        </ul>
+      </div>
+    );
+  };
+
   return (
     <div
       className={`w-full  transition-all duration-300 z-10 ${
@@ -45,7 +90,6 @@ const NavBar = () => {
           to="/"
           className="flex items-center gap-2 no-underline text-primary"
         >
-          {/* <ion-icon name="bag" className="text-2xl"></ion-icon> */}
           <span className="text-2xl font-medium">MODA</span>
         </NavLink>
 
@@ -69,7 +113,7 @@ const NavBar = () => {
         <div className="flex items-center gap-4">
           <div className="md:hidden">
             <button
-              className="text-gray-500 hover:text-gray-700 focus:outline-none "
+              className="text-gray-500 hover:text-gray-700 focus:outline-none"
               onClick={() => setExpand(!expand)}
             >
               <i className="fa-solid fa-bars"></i>{" "}
@@ -83,48 +127,7 @@ const NavBar = () => {
             <i className="fa-solid fa-cart-shopping"></i>
           </Link>
           {user ? (
-            <>
-              <div className="dropdown dropdown-end">
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className=" cursor-pointer m-1 text-primary"
-                >
-                  <i class="fa-solid fa-user"></i>
-                </div>
-                <ul
-                  tabIndex={0}
-                  className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-                >
-                  <li>
-                    <a>Tài khoản</a>
-                  </li>
-                  {roleName === "isAdmin" ? (
-                    <NavLink to="/admin">
-                      <li>
-                        <span>Trang quản trị</span>
-                      </li>
-                    </NavLink>
-                  ) : roleName === "isStaff" ? (
-                    <NavLink to="/staff">
-                      <li>
-                        <span>Trang quản trị</span>
-                      </li>
-                    </NavLink>
-                  ) : roleName === "isShop" ? (
-                    <NavLink to="/management-shop">
-                      <li>
-                        <span>Trang quản trị</span>
-                      </li>
-                    </NavLink>
-                  ) : null}
-
-                  <li onClick={handleLogOut}>
-                    <a>Đăng xuất</a>
-                  </li>
-                </ul>
-              </div>
-            </>
+            renderDropDown()
           ) : (
             <Link
               to="/login"

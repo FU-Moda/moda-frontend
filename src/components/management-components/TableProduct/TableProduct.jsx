@@ -1,13 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { clothTypeLabels } from "../../../utils/constant";
 import { ProductDetailModal } from "../../../pages/Management/Admin/ShopDetail/ProductDetailModal";
-import { getRatingByProductId } from "../../../api/productApi";
+import {
+  getProductStockByProductId,
+  getRatingByProductId,
+} from "../../../api/productApi";
 import Loader from "../../../components/Loader/Loader";
+import { decode } from "../../../utils/jwtUtil";
+import { ProductStockModal } from "../ProductStock/ProductStockModal";
 export const TableProduct = ({ products }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isProductStockModalOpen, setIsProductStockModalOpen] = useState(false);
+
   const [ratings, setRating] = useState(null);
+  const [productStocks, setProductStock] = useState([]);
 
   const handleProductClick = async (product) => {
     setIsLoading(true);
@@ -19,9 +27,21 @@ export const TableProduct = ({ products }) => {
     setIsModalOpen(true);
     setIsLoading(false);
   };
+  const handleProductStockClick = async (product) => {
+    setIsLoading(true);
+    setSelectedProduct(product);
+    const data = await getProductStockByProductId(product.product?.id);
+    if (data.isSuccess) {
+      setProductStock(data.result?.items);
+    }
+    setIsProductStockModalOpen(true);
+    setIsLoading(false);
+  };
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
+  const role = decode(localStorage.getItem("accessToken")).role;
+
   return (
     <>
       <Loader isLoading={isLoading} />
@@ -34,21 +54,18 @@ export const TableProduct = ({ products }) => {
               <th>Mô tả sản phẩm</th>
               <th>Giới tính</th>
               <th>Loại</th>
+              <th>Hành động</th>
             </tr>
           </thead>
           <tbody>
             {products &&
               products.map((item) => (
-                <tr
-                  key={item.product.id}
-                  onClick={() => handleProductClick(item)}
-                  className="cursor-pointer"
-                >
+                <tr key={item.product.id} className="cursor-pointer">
                   <td>
                     <img
                       src={item.staticFile[0].img}
                       alt={item.product.name}
-                      className="w-16 h-16 object-cover"
+                      className="w-16 h-16 object-cover rounded-full"
                     />
                   </td>
                   <td>{item.product.name}</td>
@@ -61,6 +78,24 @@ export const TableProduct = ({ products }) => {
                       : "Unisex"}
                   </td>
                   <td>{clothTypeLabels[item.product?.clothType]}</td>
+                  <th>
+                    <div className="flex justify-start">
+                      <button
+                        className=" text-primary rounded-md cursor-pointer p-4"
+                        onClick={() => handleProductClick(item)}
+                      >
+                        <i className="fa-solid fa-eye"></i>
+                      </button>
+                      {role === "isShop" && (
+                        <button
+                          onClick={() => handleProductStockClick(item)}
+                          className=" text-primary rounded-md mx-2 p-4 cursor-pointer"
+                        >
+                          <i className="fa-solid fa-warehouse"></i>
+                        </button>
+                      )}
+                    </div>
+                  </th>
                 </tr>
               ))}
           </tbody>
@@ -72,6 +107,14 @@ export const TableProduct = ({ products }) => {
             product={selectedProduct}
             ratings={ratings}
             onClose={handleModalClose}
+          />
+        </>
+      )}
+      {isProductStockModalOpen && (
+        <>
+          <ProductStockModal
+            items={productStocks}
+            onClose={() => setIsProductStockModalOpen(!isProductStockModalOpen)}
           />
         </>
       )}

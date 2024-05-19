@@ -54,13 +54,11 @@ const RatingComponent = ({ id }) => {
       />
       <label className="form-control w-full max-w-xs">
         <div className="label">
-          <span className="label-text">Pick a file</span>
+          <span className=" btn bg-primary text-white rounded-md">
+            Chọn tệp
+          </span>
         </div>
-        <input
-          type="file"
-          onChange={handleImageChange}
-          className="file-input file-input-bordered w-full max-w-xs"
-        />
+        <input type="file" onChange={handleImageChange} className="hidden" />
       </label>
 
       {imageFile && (
@@ -73,7 +71,7 @@ const RatingComponent = ({ id }) => {
         </div>
       )}
       <button
-        className="mt-10 bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="mt-10 bg-primary text-white px-6 py-3 rounded-md transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         disabled={rating === 0 || comment.trim() === ""}
       >
         Gửi đánh giá
