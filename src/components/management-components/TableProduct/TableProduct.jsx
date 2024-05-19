@@ -80,18 +80,19 @@ export const TableProduct = ({ products }) => {
                   <td>{clothTypeLabels[item.product?.clothType]}</td>
                   <th>
                     <div className="flex justify-start">
-                      <button
-                        className=" text-primary rounded-md cursor-pointer p-4"
-                        onClick={() => handleProductClick(item)}
-                      >
-                        <i className="fa-solid fa-eye"></i>
-                      </button>
-                      {role === "isShop" && (
+                      {role === "isShop" ? (
                         <button
                           onClick={() => handleProductStockClick(item)}
                           className=" text-primary rounded-md mx-2 p-4 cursor-pointer"
                         >
-                          <i className="fa-solid fa-warehouse"></i>
+                          <i className="fa-solid fa-eye"></i>
+                        </button>
+                      ) : (
+                        <button
+                          className=" text-primary rounded-md cursor-pointer p-4"
+                          onClick={() => handleProductClick(item)}
+                        >
+                          <i className="fa-solid fa-eye"></i>
                         </button>
                       )}
                     </div>

@@ -15,6 +15,7 @@ import { ShopDetail } from "../pages/Management/Admin/ShopDetail/ShopDetail";
 import { decode } from "../utils/jwtUtil";
 import { toast } from "react-toastify";
 import { ManagementOrder } from "../pages/Management/Shop/ManagementOrder";
+import ProductForm from "../pages/Management/Shop/Modal/ProductForm";
 const ProtectedRouteAuth = ({ children }) => {
   const role = decode(localStorage.getItem("accessToken"));
   if (role !== "isStaff" && role != "isAdmin") {
@@ -121,6 +122,14 @@ function Routers() {
           element: (
             <ProtectedRouteShop>
               <ManagementProduct />
+            </ProtectedRouteShop>
+          ),
+        },
+        {
+          path: "product/create",
+          element: (
+            <ProtectedRouteShop>
+              <ProductForm />
             </ProtectedRouteShop>
           ),
         },

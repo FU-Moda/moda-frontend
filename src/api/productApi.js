@@ -53,6 +53,22 @@ const getProductByShopId = async (id, pageNumber, pageSize) => {
     return data.data;
   } catch (error) {}
 };
+const addNewProduct = async (data) => {
+  try {
+    const response = await axios.post(
+      "https://moda-api.azurewebsites.net/product/add-new-product",
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
 export {
   getAllProduct,
   getProductById,
@@ -60,4 +76,5 @@ export {
   getShopById,
   getProductByShopId,
   getProductStockByProductId,
+  addNewProduct,
 };
