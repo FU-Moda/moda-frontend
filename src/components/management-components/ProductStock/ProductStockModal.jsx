@@ -1,5 +1,6 @@
 import {
   clothTypeLabels,
+  clothingSizeLabels,
   genderLabels,
   shoeSizeLabels,
 } from "../../../utils/constant";
@@ -67,7 +68,7 @@ export const ProductStockModal = ({ items, onClose }) => {
                         <td>
                           {stock.shoeSize
                             ? shoeSizeLabels[stock.shoeSize]
-                            : clothTypeLabels[stock.clothType]}
+                            : clothingSizeLabels[stock.clothingSize]}
                         </td>
                         <td>{stock.quantity}</td>
                         <td>{stock.price}</td>

@@ -196,7 +196,20 @@ const ProductForm = () => {
       for (const key in formData) {
         if (key === "ProductStocks") {
           formData[key].forEach((stock, index) => {
-            data.append(`ProductStocks[${index}]`, JSON.stringify(stock));
+            data.append(
+              `ProductStocks[${index}].clothingSize`,
+              stock.clothingSize ? stock.clothingSize : ""
+            );
+            data.append(`ProductStocks[${index}].price`, stock.price);
+            data.append(`ProductStocks[${index}].quantity`, stock.quantity);
+            data.append(
+              `ProductStocks[${index}].warehouseId`,
+              stock.warehouseId
+            );
+            data.append(
+              `ProductStocks[${index}].shoeSize`,
+              stock.shoeSize ? stock.shoeSize : ""
+            );
           });
         } else {
           data.append(key, formData[key]);
