@@ -174,7 +174,7 @@ const ProductForm = () => {
       const dataResponse = await addNewProduct(data);
       if (dataResponse.isSuccess) {
         toast.success("Tạo mới thành công");
-        navigate("management-shop/product");
+        navigate("/management-shop/product");
       } else {
         data.dataResponse.messages.forEach((item) => {
           toast.error(item);
