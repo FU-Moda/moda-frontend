@@ -131,17 +131,14 @@ const ProductDetails = ({ selectedProduct }) => {
               )}
           </div>
 
-          <div className="grid grid-cols-4 gap-4">
-            <div className="w-24 h-24 border p-2 m-4 shadow-md">
-              {selectedProduct?.staticFile &&
-                selectedProduct.staticFile.length > 0 && (
-                  <img
-                    src={selectedProduct.staticFile[0]?.img}
-                    alt=""
-                    className="w-full h-full "
-                  />
-                )}
-            </div>
+          <div className="flex">
+            {selectedProduct?.staticFile &&
+              selectedProduct.staticFile.length > 0 &&
+              selectedProduct.staticFile.map((item) => (
+                <div className="w-24 h-24 border p-2 m-4 shadow-md">
+                  <img src={item.img} alt="" className="w-full h-full " />
+                </div>
+              ))}
           </div>
         </div>
 

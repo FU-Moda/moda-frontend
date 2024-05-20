@@ -10,11 +10,13 @@ import {
 import { addNewProduct } from "../../../../api/productApi";
 import { toast } from "react-toastify";
 import { getAllWarehouse } from "../../../../api/warehouseApi";
+import { useNavigate } from "react-router-dom";
 
 const ProductForm = () => {
   const { shop } = useSelector((state) => state.shop);
   const [errors, setErrors] = useState({});
   const [wareHouse, setWarehouse] = useState([]);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     Name: "",
     Description: "",
@@ -31,68 +33,17 @@ const ProductForm = () => {
       },
     ],
   });
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
 
-  //   const handleChange = (e) => {
-  //     const { name, value } = e.target;
-
-  //     // Check if the input name includes "ProductStocks"
-  //     if (name.includes("ProductStocks")) {
-  //       const parts = name.split("."); // Tách chuỗi tên input dựa trên dấu chấm (.)
-  //       console.log(parts);
-  //       if (parts.length === 2) {
-  //         const indexStr = parts[0].match(/\d+/)[0]; // Lấy phần index từ tên input
-  //         const index = parseInt(indexStr);
-  //         const prop = parts[1];
-  //         if (!isNaN(index)) {
-  //           const parsedValue =
-  //             prop === "price" || prop === "quantity"
-  //               ? parseFloat(value) || 0
-  //               : value;
-  //           console.log(parsedValue);
-  //           // Kiểm tra giá trị của formData.ClothType để gán giá trị cho clothingSize hoặc shoeSize
-  //           const updatedProductStocks = [...formData.ProductStocks];
-  //           if (formData.ClothType >= 0 && formData.ClothType <= 3) {
-  //             updatedProductStocks[index] = {
-  //               ...updatedProductStocks[index],
-  //               clothingSize: parsedValue,
-  //               shoeSize: null,
-  //             };
-  //           } else if (formData.ClothType === 4) {
-  //             updatedProductStocks[index] = {
-  //               ...updatedProductStocks[index],
-  //               clothingSize: null,
-  //               shoeSize: parsedValue,
-  //             };
-  //           }
-  //           console.log(updatedProductStocks);
-  //           // Update the formData state with the new ProductStocks array
-  //           setFormData({
-  //             ...formData,
-  //             ProductStocks: updatedProductStocks,
-  //           });
-  //           return;
-  //         }
-  //       }
-  //       // If the index or prop is invalid, return without updating the state
-  //       return;
-  //     }
-
-  //     // If the input name doesn't include "ProductStocks", update the formData state directly
-  //     setFormData({ ...formData, [name]: value });
-  //   };
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Check if the input name includes "ProductStocks"
     if (name.includes("ProductStocks")) {
-      const parts = name.split("."); // Tách chuỗi tên input dựa trên dấu chấm (.)
-      console.log(parts);
+      const parts = name.split(".");
       if (parts.length === 2) {
-        const indexStr = parts[0].match(/\d+/)[0]; // Lấy phần index từ tên input
+        const indexStr = parts[0].match(/\d+/)[0];
         const index = parseInt(indexStr);
         const prop = parts[1];
-        console.log(prop);
         if (!isNaN(index)) {
           const parsedValue =
             prop === "clothingSize" ||
@@ -102,14 +53,12 @@ const ProductForm = () => {
               ? parseFloat(value) || 0
               : value;
 
-          // Create a copy of the ProductStocks array and update the specific item
           const updatedProductStocks = [...formData.ProductStocks];
           updatedProductStocks[index] = {
             ...updatedProductStocks[index],
             [prop]: parsedValue,
           };
 
-          // Update the formData state with the new ProductStocks array
           setFormData({
             ...formData,
             ProductStocks: updatedProductStocks,
@@ -117,14 +66,13 @@ const ProductForm = () => {
           return;
         }
       }
-      // If the index or prop is invalid, return without updating the state
       return;
     }
 
-    // If the input name doesn't include "ProductStocks", update the formData state directly
     setFormData({ ...formData, [name]: value });
-    console.log(formData);
+    validateForm();
   };
+
   const validateForm = () => {
     let errors = {};
     let isValid = true;
@@ -162,15 +110,16 @@ const ProductForm = () => {
       errors.ProductStocks = "Kho phải được chọn";
       isValid = false;
     }
-    if (file == null) {
-      errors.File = "Ảnh phải được chọn";
+    if (files.length === 0) {
+      errors.Files = "Ảnh phải được chọn";
       isValid = false;
     }
     setErrors(errors);
     return isValid;
   };
+
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    setFiles(Array.from(e.target.files));
   };
 
   const addProductStock = () => {
@@ -215,13 +164,25 @@ const ProductForm = () => {
           data.append(key, formData[key]);
         }
       }
-      data.append("File.Img", file);
+      console.log(files);
+      // files.forEach((file, index) => {
+      //   data.append(`File.Img[${index}]`, file);
+      // });
+      files.forEach((file, index) => {
+        data.append(`Img`, file);
+      });
       const dataResponse = await addNewProduct(data);
       if (dataResponse.isSuccess) {
         toast.success("Tạo mới thành công");
+        navigate("management-shop/product");
+      } else {
+        data.dataResponse.messages.forEach((item) => {
+          toast.error(item);
+        });
       }
     }
   };
+
   const removeProductStock = (index) => {
     setFormData({
       ...formData,
@@ -233,12 +194,13 @@ const ProductForm = () => {
     const data = await getAllWarehouse(1, 100);
     if (data.isSuccess) {
       setWarehouse(data.result.items);
-      console.log(data.result.items);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
+
   return (
     <div className="max-w-lg mx-auto p-8 rounded-lg shadow-lg">
       <h1 className="text-2xl font-bold mb-6 text-center text-primary">
@@ -438,12 +400,25 @@ const ProductForm = () => {
           </label>
           <input
             type="file"
-            name="File.Img"
+            name="Files"
+            multiple
             onChange={handleFileChange}
             className="file-input file-input-bordered"
           />
         </div>
-        {errors.File && <span className="text-error">{errors.File}</span>}
+        {errors.Files && <span className="text-error">{errors.Files}</span>}
+        <div className="flex ">
+          {files &&
+            files.map((item) => (
+              <div className="w-20 h-20">
+                <img
+                  src={URL.createObjectURL(item)}
+                  alt="Preview"
+                  className="max-w-full h-full rounded-md shadow-md"
+                />
+              </div>
+            ))}
+        </div>
         <button type="submit" className="btn btn-primary btn-block">
           Tạo mới
         </button>

@@ -63,7 +63,7 @@ export const TableProduct = ({ products }) => {
                 <tr key={item.product.id} className="cursor-pointer">
                   <td>
                     <img
-                      src={item.staticFile[0].img}
+                      src={item.staticFile[0]?.img}
                       alt={item.product.name}
                       className="w-16 h-16 object-cover rounded-full"
                     />
