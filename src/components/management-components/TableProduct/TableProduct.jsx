@@ -15,7 +15,7 @@ export const TableProduct = ({ products }) => {
   const [isProductStockModalOpen, setIsProductStockModalOpen] = useState(false);
 
   const [ratings, setRating] = useState(null);
-  const [productStocks, setProductStock] = useState([]);
+  const [productStocks, setProductStock] = useState({});
 
   const handleProductClick = async (product) => {
     setIsLoading(true);
@@ -32,7 +32,7 @@ export const TableProduct = ({ products }) => {
     setSelectedProduct(product);
     const data = await getProductStockByProductId(product.product?.id);
     if (data.isSuccess) {
-      setProductStock(data.result?.items);
+      setProductStock(data.result);
     }
     setIsProductStockModalOpen(true);
     setIsLoading(false);
