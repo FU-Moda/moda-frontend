@@ -38,7 +38,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [isModalForgotPasswordVisible, setIsModalForgotPasswordVisible] =
     useState(false);
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user || {});
   const dispatch = useDispatch();
   const googleProvider = new GoogleAuthProvider();
   const navigate = useNavigate();
@@ -96,15 +96,15 @@ const LoginPage = () => {
             localStorage.getItem("accessToken")
           );
           if (fetchAccount.isSuccess) {
-            // console.log(fetchAccount.result);
-            // const fakeUserData = {
-            //   name: "John Doe",
-            //   email: "john@example.com",
-            // };
-            const userAccount = fetchAccount.result;
-            dispatch(login(userAccount));
-            toast.success("Đăng nhập thành công");
-            navigate("/");
+            const userAccount = fetchAccount.result?.account;
+            console.log(userAccount);
+            const shopData = await getShopByAccountId(userAccount.id);
+            if (shopData.isSuccess) {
+              dispatch(login(userAccount));
+              dispatch(setShop(shopData.result.items[0]));
+              toast.success("Đăng nhập thành công");
+              navigate("/");
+            }
           }
         }
       }

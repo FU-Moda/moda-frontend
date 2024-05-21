@@ -5,7 +5,7 @@ import { TableProduct } from "../../../components/management-components/TablePro
 import Loader from "../../../components/Loader/Loader";
 import { NavLink } from "react-router-dom";
 const ManagementProduct = () => {
-  const { shop } = useSelector((state) => state.shop);
+  const { shop } = useSelector((state) => state.shop || {});
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 

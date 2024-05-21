@@ -14,8 +14,8 @@ import PaymentMethod from "../components/PaymentMethod/PaymentMethod";
 import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
-  const { cartList } = useSelector((state) => state.cart);
-  const { user } = useSelector((state) => state.user);
+  const { cartList } = useSelector((state) => state.cart || []);
+  const { user } = useSelector((state) => state.user || {});
   const [selectedMethod, setSelectedMethod] = useState("");
   const dispatch = useDispatch();
 

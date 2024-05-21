@@ -8,7 +8,7 @@ import { orderLabels } from "../../utils/constant";
 import { formatDateTime, formatPrice } from "../../utils/util";
 import { clothingSizeLabels, shoeSizeLabels } from "../../utils/constant";
 const PersonalInformation = () => {
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user || {});
   const [orders, setOrders] = useState([]);
   const [isOrderDetail, setIsOrderDetail] = useState(false);
   const [orderDetailId, setOrderDetailId] = useState(null);

@@ -13,7 +13,7 @@ import { getAllWarehouse } from "../../../../api/warehouseApi";
 import { useNavigate } from "react-router-dom";
 
 const ProductForm = () => {
-  const { shop } = useSelector((state) => state.shop);
+  const { shop } = useSelector((state) => state.shop || {});
   const [errors, setErrors] = useState({});
   const [wareHouse, setWarehouse] = useState([]);
   const navigate = useNavigate();

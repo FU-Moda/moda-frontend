@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/features/authSlice";
 import { toast } from "react-toastify";
@@ -7,12 +7,12 @@ import { decode } from "../../utils/jwtUtil";
 import { clothTypeLabels } from "../../utils/constant";
 
 const NavBar = () => {
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user || {});
   const dispatch = useDispatch();
   const [expand, setExpand] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
   const [roleName, setRoleName] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const scrollHandler = () => {
       setIsFixed(window.scrollY >= 100);
@@ -31,6 +31,7 @@ const NavBar = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     dispatch(logout());
+    navigate("/");
     toast.success("Đăng xuất thành công");
   };
 

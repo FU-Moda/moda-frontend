@@ -7,7 +7,7 @@ import { decode } from "../../../utils/jwtUtil";
 const SideBar = () => {
   const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.sidebar?.isOpen);
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user || {});
   const [roleName, setRoleName] = useState(null);
 
   const location = useLocation();
