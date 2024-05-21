@@ -1,10 +1,10 @@
-import UserOrder from "../../components/Order/UserOrder"
+import UserOrder from "../../components/Order/UserOrder";
 
- const Ship = () => {
-
-    return <>
-    
-    <UserOrder/>
+const Ship = () => {
+  return (
+    <>
+      <UserOrder />
     </>
-}
+  );
+};
 export default Ship;
