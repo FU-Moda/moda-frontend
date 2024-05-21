@@ -16,6 +16,7 @@ import { decode } from "../utils/jwtUtil";
 import { toast } from "react-toastify";
 import { ManagementOrder } from "../pages/Management/Shop/ManagementOrder";
 import ProductForm from "../pages/Management/Shop/Modal/ProductForm";
+import PersonalInformation from "../pages/Common/PersonalInformation";
 const ProtectedRouteAuth = ({ children }) => {
   const role = decode(localStorage.getItem("accessToken"));
   if (role !== "isStaff" && role != "isAdmin") {
@@ -69,9 +70,10 @@ function Routers() {
       children: [
         { index: true, element: <Home /> },
         { path: "/cart", element: <Cart /> },
-        { path: "/shop", element: <Shop /> },
+        { path: "/product/:id", element: <Shop /> },
         { path: "/shop/:id", element: <Product /> },
         { path: "/shop-detail/:id", element: <ShopProductList /> },
+        { path: "/personal-information", element: <PersonalInformation /> },
       ],
     },
     {

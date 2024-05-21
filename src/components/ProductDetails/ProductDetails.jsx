@@ -13,7 +13,7 @@ import {
 const ProductDetails = ({ selectedProduct }) => {
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState({});
+  const [selectedSize, setSelectedSize] = useState(-1);
   const [stock, setStock] = useState(null);
   const [selectedImage, setSelectedImage] = useState(
     selectedProduct.staticFile?.[0]?.img || ""
@@ -28,6 +28,7 @@ const ProductDetails = ({ selectedProduct }) => {
   };
   const handleSizeChange = (e) => {
     setSelectedSize(e.target.value);
+    console.log(e.target.value);
   };
 
   useEffect(() => {
@@ -43,11 +44,21 @@ const ProductDetails = ({ selectedProduct }) => {
   }, [selectedSize]);
 
   const handleAdd = (productItem, productStock, quantity) => {
+    const productStockFilter = selectedProduct.productStock?.filter(
+      (item) =>
+        (item.clothingSize && item.clothingSize) ||
+        (item.shoeSize && item.shoeSize)
+    )[0];
+    console.log({
+      productItem: productItem,
+      productStock: productStock ? productStock : productStockFilter,
+      num: quantity,
+    });
     dispatch(
       addToCart({
         productItem: productItem,
-        productStock: productStock,
-        num: quantity,
+        productStock: productStock ? productStock : productStockFilter,
+        num: Number(quantity),
       })
     );
     toast.success("Sản phẩm đã được thêm vào giỏ hàng!");
@@ -63,11 +74,18 @@ const ProductDetails = ({ selectedProduct }) => {
           </label>
           <select
             id="size"
-            value={selectedSize || ""}
+            value={
+              selectedSize !== -1
+                ? selectedSize
+                : selectedProduct?.productStock?.[0].shoeSize
+            }
             onChange={handleSizeChange}
             className="select select-bordered"
           >
-            <option value="">Select a size</option>
+            <option value={-1} checked>
+              Select a size
+            </option>
+
             {selectedProduct?.productStock?.map((stock) => (
               <option key={stock.shoeSize} value={stock.shoeSize}>
                 {shoeSizeLabels[stock.shoeSize]}
@@ -85,11 +103,17 @@ const ProductDetails = ({ selectedProduct }) => {
           </label>
           <select
             id="size"
-            value={selectedSize || ""}
+            value={
+              selectedSize != -1
+                ? selectedSize
+                : selectedProduct?.productStock?.[0].clothingSize
+            }
             onChange={handleSizeChange}
             className="select select-bordered"
           >
-            <option value="">Select a size</option>
+            <option value={-1} checked>
+              Select a size
+            </option>
             {selectedProduct?.productStock?.map((stock) => (
               <option key={stock.clothingSize} value={stock.clothingSize}>
                 {clothingSizeLabels[stock.clothingSize]}

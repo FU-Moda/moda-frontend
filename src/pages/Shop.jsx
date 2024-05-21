@@ -6,26 +6,35 @@ import { products } from "../utils/products";
 import ShopList from "../components/ShopList";
 import Banner from "../components/Banner/Banner";
 import useWindowScrollToTop from "../hooks/useWindowScrollToTop";
-import { getAllProduct } from "../api/productApi";
+import { getAllProduct, getAllProductByFilter } from "../api/productApi";
 import Loader from "../components/Loader/Loader";
+import { useParams } from "react-router-dom";
 
 const Shop = () => {
   // const [filterList, setFilterList] = useState(
   //   products.filter((item) => item.category === "sofa")
   // );
+  const { id } = useParams();
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const fetchData = async () => {
     setIsLoading(true);
-    const data = await getAllProduct(1, 10);
+    const data = await getAllProductByFilter(1, 10, {
+      clothType: Number(id),
+    });
     if (data.isSuccess) {
-      setProducts(data.result.items);
+      if (data.result != null) {
+        setProducts(data.result.items);
+      } else {
+        setProducts([]);
+      }
+      setIsLoading(false);
     }
     setIsLoading(false);
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [id]);
   useWindowScrollToTop();
 
   return (

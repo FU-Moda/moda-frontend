@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="flex flex-col md:flex md:flex-row">
         <div className="px-5">
           <div className="flex items-center gap-2 mb-5">
-            <h1 className="text-2xl font-bold">Moda</h1>
+            <h1 className="text-2xl font-bold text-primary">Moda</h1>
           </div>
           <p className="opacity-50 mb-5">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Auctor
@@ -14,23 +14,25 @@ const Footer = () => {
             lectus vel ut sollicitudin elit at amet.
           </p>
         </div>
-        <div className="px-5">
-          <h2 className="text-xl mb-5">Về chúng tôi</h2>
+        <div className="px-5 ">
+          <h2 className="text-xl mb-5 text-primary">Về chúng tôi</h2>
           <ul className="opacity-50">
             <li className="mb-2">Facebook</li>
             <li className="mb-2">Instagram</li>
             <li className="mb-2">Tiktok</li>
           </ul>
         </div>
-        <div className="px-5">
-          <h2 className="text-xl mb-5">Dịch vụ chăm sóc khách hàng</h2>
+        <div className="px-5 ">
+          <h2 className="text-xl mb-5 text-primary">
+            Dịch vụ chăm sóc khách hàng
+          </h2>
           <ul className="opacity-50">
             <li className="mb-2">Trung tâm bảo hành</li>
             <li className="mb-2">Chính sách</li>
           </ul>
         </div>
-        <div className="px-5">
-          <h2 className="text-xl mb-5">Liên hệ</h2>
+        <div className="px-5 ">
+          <h2 className="text-xl mb-5 text-primary">Liên hệ</h2>
           <ul className="opacity-50">
             <li className="mb-2">
               Đại Học FPT Hồ Chí Minh, Quận 9, Thành Phố Hồ Chí Minh

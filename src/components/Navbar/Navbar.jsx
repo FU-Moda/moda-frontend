@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/features/authSlice";
 import { toast } from "react-toastify";
 import { decode } from "../../utils/jwtUtil";
+import { clothTypeLabels } from "../../utils/constant";
 
 const NavBar = () => {
   const { user } = useSelector((state) => state.user);
@@ -48,7 +49,7 @@ const NavBar = () => {
           className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
         >
           <li>
-            <a>Tài khoản</a>
+            <NavLink to="/personal-information">Tài khoản </NavLink>
           </li>
           {roleName === "isAdmin" && (
             <NavLink to="/admin">
@@ -101,13 +102,16 @@ const NavBar = () => {
           >
             Trang chủ
           </NavLink>
-          <NavLink
-            to="/shop"
-            className="text-base font-semibold hover:text-gray-500 no-underline text-primary"
-            onClick={() => setExpand(false)}
-          >
-            Sản phẩm
-          </NavLink>
+          {Object.keys(clothTypeLabels).map((key, value) => (
+            <NavLink
+              key={key}
+              to={`/product/${key}`}
+              className="text-base font-semibold hover:text-gray-500 no-underline text-primary"
+              onClick={() => setExpand(false)}
+            >
+              {clothTypeLabels[value]}
+            </NavLink>
+          ))}
         </div>
 
         <div className="flex items-center gap-4">

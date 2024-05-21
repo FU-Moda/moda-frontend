@@ -50,7 +50,7 @@ const ProductCard = ({ title, productItem }) => {
             ></i>
           ))}
         </div>
-        <div className="flex justify-between items-center mt-2">
+        <div className="flex flex-col  md:flex-row justify-between items-center my-2">
           <h4 className="font-bold text-red-600">
             {" "}
             {formatPrice(productItem.productStock[0]?.price)}
@@ -68,7 +68,7 @@ const ProductCard = ({ title, productItem }) => {
             <i className="fa-solid fa-plus"></i>
           </button>
         </div>
-        <div className="flex items-center text-green-700">
+        <div className="flex flex-col  md:flex-row items-center text-green-700">
           <i class="fa-solid fa-truck-fast"></i>
           <h4 className="mx-2">Miễn phí giao hàng 5 km</h4>
         </div>
