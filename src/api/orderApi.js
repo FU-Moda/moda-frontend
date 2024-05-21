@@ -19,3 +19,21 @@ export const getAllOrderByShopId = async (id, pageNumber, pageSize) => {
     return response.data;
   } catch (error) {}
 };
+
+export const getAllOrderByAccountId = async (id, pageNumber, pageSize) => {
+  try {
+    const response = await axios.get(
+      `${baseUrl}/order/get-all-order-by-account-id/${id}/${pageNumber}/${pageSize}`
+    );
+    return response.data;
+  } catch (error) {}
+};
+
+export const updateOrderStatus = async (id, status) => {
+  try {
+    const response = await axios.put(
+      `${baseUrl}/order/update-status?orderId=${id}&orderStatus=${status}`
+    );
+    return response.data;
+  } catch (error) {}
+};
