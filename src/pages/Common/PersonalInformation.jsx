@@ -153,7 +153,8 @@ const PersonalInformation = () => {
                     <strong>Tổng tiền:</strong> {formatPrice(data.order?.total)}
                   </p>
                   <p>
-                    <strong>Phí giao hàng:</strong> {data.order?.deliveryCost}
+                    <strong>Phí giao hàng:</strong>{" "}
+                    {formatPrice(data.order?.deliveryCost)}
                   </p>
                   <p>
                     <strong>Thời gian đặt hàng:</strong>{" "}

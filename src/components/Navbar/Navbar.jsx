@@ -103,14 +103,14 @@ const NavBar = () => {
           >
             Trang chủ
           </NavLink>
-          {Object.keys(clothTypeLabels).map((key, value) => (
+          {Object.keys(clothTypeLabels).map((key, index) => (
             <NavLink
               key={key}
               to={`/product/${key}`}
               className="text-base font-semibold hover:text-gray-500 no-underline text-primary"
               onClick={() => setExpand(false)}
             >
-              {clothTypeLabels[value]}
+              {clothTypeLabels[key]}
             </NavLink>
           ))}
         </div>
@@ -154,13 +154,18 @@ const NavBar = () => {
             >
               Trang chủ
             </Link>
-            <Link
-              to="/shop"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
-              onClick={() => setExpand(false)}
-            >
-              Sản phẩm
-            </Link>
+
+            {Object.keys(clothTypeLabels).map((key, index) => (
+              <NavLink
+                key={key}
+                to={`/product/${key}`}
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
+                onClick={() => setExpand(false)}
+              >
+                {clothTypeLabels[key]}
+              </NavLink>
+            ))}
+
             <Link
               to="/cart"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
