@@ -12,11 +12,12 @@ import { toast } from "react-toastify";
 import { deleteCart } from "../redux/features/cartSlice";
 import PaymentMethod from "../components/PaymentMethod/PaymentMethod";
 import { useNavigate } from "react-router-dom";
-
+import Loader from "../components/Loader/Loader";
 const Cart = () => {
   const { cartList } = useSelector((state) => state.cart || []);
   const { user } = useSelector((state) => state.user || {});
   const [selectedMethod, setSelectedMethod] = useState("");
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const totalPrice = cartList.reduce(
@@ -27,8 +28,8 @@ const Cart = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  console.log(cartList);
   const checkOut = async () => {
+    setLoading(true);
     const productStockDtos = cartList.map((item) => ({
       id: item.productStock.id,
       quantity: item.quantity,
@@ -45,7 +46,10 @@ const Cart = () => {
           dispatch(deleteCart());
           window.location.href = response.result;
         } else {
-          toast.error("Đặt hàng thất bại");
+          response.messages.forEach((message) => {
+            toast.error(message);
+          });
+          setLoading(false);
         }
       } else {
         const response = await createOrderCOD({
@@ -57,10 +61,14 @@ const Cart = () => {
           dispatch(deleteCart());
           navigate("/");
         } else {
-          toast.error("Đặt hàng thất bại");
+          response.messages.forEach((message) => {
+            toast.error(message);
+          });
         }
+        setLoading(false);
       }
     }
+    setLoading(false);
   };
 
   const log = (data) => {
@@ -68,6 +76,7 @@ const Cart = () => {
   };
   return (
     <div className="container mx-auto py-8">
+      <Loader isLoading={loading} />
       {user ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2gap-8">

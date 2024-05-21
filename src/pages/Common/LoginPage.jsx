@@ -78,40 +78,34 @@ const LoginPage = () => {
   };
 
   const handleGoogleSignIn = async () => {
-    try {
-      setIsLoading(true);
-      const userCred = await signInWithPopup(auth, googleProvider);
-      console.log("userCred: ", userCred);
+    setIsLoading(true);
+    const userCred = await signInWithPopup(auth, googleProvider);
+    console.log("userCred: ", userCred);
 
-      if (userCred) {
-        const accessToken = userCred._tokenResponse.idToken;
-        console.log("Google Access Token: ", accessToken);
-        var result = await googleCallback(accessToken);
-        if (result.isSuccess) {
-          console.log("callback: ", result);
-          localStorage.setItem("accessToken", result?.result?.token);
-          localStorage.setItem("refreshToken", result?.result?.refreshToken);
-          var fetchAccount = await getAccountById(
-            decode(localStorage.getItem("accessToken")).accountId,
-            localStorage.getItem("accessToken")
-          );
-          if (fetchAccount.isSuccess) {
-            const userAccount = fetchAccount.result?.account;
-            console.log(userAccount);
-            const shopData = await getShopByAccountId(userAccount.id);
-            if (shopData.isSuccess) {
-              dispatch(login(userAccount));
-              dispatch(setShop(shopData.result.items[0]));
-              toast.success("Đăng nhập thành công");
-              navigate("/");
-            }
+    if (userCred) {
+      const accessToken = userCred._tokenResponse.idToken;
+      console.log("Google Access Token: ", accessToken);
+      var result = await googleCallback(accessToken);
+      if (result.isSuccess) {
+        console.log("callback: ", result);
+        localStorage.setItem("accessToken", result?.result?.token);
+        localStorage.setItem("refreshToken", result?.result?.refreshToken);
+        var fetchAccount = await getAccountById(
+          decode(localStorage.getItem("accessToken")).accountId,
+          localStorage.getItem("accessToken")
+        );
+        if (fetchAccount.isSuccess) {
+          const userAccount = fetchAccount.result?.account;
+          console.log(userAccount);
+          const shopData = await getShopByAccountId(userAccount.id);
+          if (shopData.isSuccess) {
+            dispatch(login(userAccount));
+            dispatch(setShop(shopData.result.items[0]));
+            toast.success("Đăng nhập thành công");
+            navigate("/");
           }
         }
       }
-    } catch (error) {
-      toast.error(
-        "Có lỗi xảy ra trong quá trình đăng nhập, vui lòng đăng nhập lại"
-      );
     }
     setIsLoading(false);
   };
