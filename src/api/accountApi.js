@@ -145,28 +145,9 @@ export const getAllAccount = async (pageIndex, pageSize) => {
   }
 };
 
-export const updateAccount = async (
-  email,
-  firstName,
-  lastName,
-  phoneNumber
-) => {
+export const updateAccount = async (data) => {
   try {
-    const res = await axios.put(
-      `${baseUrl}/account/update-account`,
-      {
-        email,
-        firstName,
-        lastName,
-        phoneNumber,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${usertoken}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const res = await axios.put(`${baseUrl}/account/update-account`, data);
     return res.data;
   } catch (err) {
     return null;

@@ -7,12 +7,13 @@ import {
 import { orderLabels } from "../../utils/constant";
 import { formatDateTime, formatPrice } from "../../utils/util";
 import { clothingSizeLabels, shoeSizeLabels } from "../../utils/constant";
+import PersonalModal from "./Account/PersonalModal";
 const PersonalInformation = () => {
   const { user } = useSelector((state) => state.user || {});
   const [orders, setOrders] = useState([]);
   const [isOrderDetail, setIsOrderDetail] = useState(false);
   const [orderDetailId, setOrderDetailId] = useState(null);
-
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [data, setData] = useState({});
   const userMap = {
     name: `${user.firstName} ${user.lastName}`,
@@ -59,14 +60,24 @@ const PersonalInformation = () => {
       </tr>
     ));
   };
+  console.log(isUpdateModalOpen);
   return (
     <div className="container mx-auto py-8">
       <div className="grid grid-cols-4 gap-8">
         <div className="col-span-1 bg-white shadow-md rounded-box p-6">
-          <h2 className="text-xl font-bold mb-4 text-primary">
-            Thông tin người dùng
-          </h2>
-          <div>
+          <div className="flex justify-between">
+            <h2 className="text-xl font-bold mb-4 text-primary">
+              Thông tin người dùng
+            </h2>
+            <span
+              onClick={() => setIsUpdateModalOpen(true)}
+              className="cursor-pointer"
+            >
+              <i className="fa-solid fa-pen text-primary"></i>
+            </span>
+          </div>
+
+          <div style={{ wordBreak: "break-word", whiteSpace: "pre-wrap" }}>
             <p>
               <strong>Tên:</strong> {userMap.name}
             </p>
@@ -197,6 +208,11 @@ const PersonalInformation = () => {
               </div>
             </div>
           </>
+        )}
+        {isUpdateModalOpen && (
+          <PersonalModal
+            onClose={() => setIsUpdateModalOpen(!isUpdateModalOpen)}
+          />
         )}
       </div>
     </div>
