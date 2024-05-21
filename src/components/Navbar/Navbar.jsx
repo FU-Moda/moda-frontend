@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/features/authSlice";
 import { toast } from "react-toastify";
 import { decode } from "../../utils/jwtUtil";
+import { clothTypeLabels } from "../../utils/constant";
 
 const NavBar = () => {
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user || {});
   const dispatch = useDispatch();
   const [expand, setExpand] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
   const [roleName, setRoleName] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const scrollHandler = () => {
       setIsFixed(window.scrollY >= 100);
@@ -30,6 +31,7 @@ const NavBar = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     dispatch(logout());
+    navigate("/");
     toast.success("Đăng xuất thành công");
   };
 
@@ -48,7 +50,7 @@ const NavBar = () => {
           className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
         >
           <li>
-            <a>Tài khoản</a>
+            <NavLink to="/personal-information">Tài khoản </NavLink>
           </li>
           {roleName === "isAdmin" && (
             <NavLink to="/admin">
@@ -101,13 +103,16 @@ const NavBar = () => {
           >
             Trang chủ
           </NavLink>
-          <NavLink
-            to="/shop"
-            className="text-base font-semibold hover:text-gray-500 no-underline text-primary"
-            onClick={() => setExpand(false)}
-          >
-            Sản phẩm
-          </NavLink>
+          {Object.keys(clothTypeLabels).map((key, value) => (
+            <NavLink
+              key={key}
+              to={`/product/${key}`}
+              className="text-base font-semibold hover:text-gray-500 no-underline text-primary"
+              onClick={() => setExpand(false)}
+            >
+              {clothTypeLabels[value]}
+            </NavLink>
+          ))}
         </div>
 
         <div className="flex items-center gap-4">

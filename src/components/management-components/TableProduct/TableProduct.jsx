@@ -15,7 +15,7 @@ export const TableProduct = ({ products }) => {
   const [isProductStockModalOpen, setIsProductStockModalOpen] = useState(false);
 
   const [ratings, setRating] = useState(null);
-  const [productStocks, setProductStock] = useState([]);
+  const [productStocks, setProductStock] = useState({});
 
   const handleProductClick = async (product) => {
     setIsLoading(true);
@@ -32,7 +32,7 @@ export const TableProduct = ({ products }) => {
     setSelectedProduct(product);
     const data = await getProductStockByProductId(product.product?.id);
     if (data.isSuccess) {
-      setProductStock(data.result?.items);
+      setProductStock(data.result);
     }
     setIsProductStockModalOpen(true);
     setIsLoading(false);
@@ -63,7 +63,7 @@ export const TableProduct = ({ products }) => {
                 <tr key={item.product.id} className="cursor-pointer">
                   <td>
                     <img
-                      src={item.staticFile[0].img}
+                      src={item.staticFile[0]?.img}
                       alt={item.product.name}
                       className="w-16 h-16 object-cover rounded-full"
                     />
@@ -80,18 +80,19 @@ export const TableProduct = ({ products }) => {
                   <td>{clothTypeLabels[item.product?.clothType]}</td>
                   <th>
                     <div className="flex justify-start">
-                      <button
-                        className=" text-primary rounded-md cursor-pointer p-4"
-                        onClick={() => handleProductClick(item)}
-                      >
-                        <i className="fa-solid fa-eye"></i>
-                      </button>
-                      {role === "isShop" && (
+                      {role === "isShop" ? (
                         <button
                           onClick={() => handleProductStockClick(item)}
                           className=" text-primary rounded-md mx-2 p-4 cursor-pointer"
                         >
-                          <i className="fa-solid fa-warehouse"></i>
+                          <i className="fa-solid fa-eye"></i>
+                        </button>
+                      ) : (
+                        <button
+                          className=" text-primary rounded-md cursor-pointer p-4"
+                          onClick={() => handleProductClick(item)}
+                        >
+                          <i className="fa-solid fa-eye"></i>
                         </button>
                       )}
                     </div>

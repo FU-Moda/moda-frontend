@@ -5,7 +5,7 @@ import Loader from "../../../components/Loader/Loader";
 import { orderLabels } from "../../../utils/constant";
 import OrderModal from "../Shop/Modal/OrderModal";
 export const ManagementOrder = () => {
-  const { shop } = useSelector((state) => state.shop);
+  const { shop } = useSelector((state) => state.shop || {});
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);

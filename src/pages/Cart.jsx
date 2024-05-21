@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addToCart,
@@ -7,21 +7,23 @@ import {
 } from "../app/features/cart/cartSlice";
 import { formatPrice } from "../utils/util";
 import { clothingSizeLabels, shoeSizeLabels } from "../utils/constant";
-import { createOrderWithPayment } from "../api/orderApi";
+import { createOrderCOD, createOrderWithPayment } from "../api/orderApi";
 import { toast } from "react-toastify";
 import { deleteCart } from "../redux/features/cartSlice";
+import PaymentMethod from "../components/PaymentMethod/PaymentMethod";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
-  const { cartList } = useSelector((state) => state.cart);
-  const { user } = useSelector((state) => state.user);
-
+  const { cartList } = useSelector((state) => state.cart || []);
+  const { user } = useSelector((state) => state.user || {});
+  const [selectedMethod, setSelectedMethod] = useState("");
   const dispatch = useDispatch();
 
   const totalPrice = cartList.reduce(
     (price, item) => price + item.quantity * item.productStock?.price,
     0
   );
-
+  const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -32,21 +34,37 @@ const Cart = () => {
       quantity: item.quantity,
     }));
 
-    console.log({
-      accountId: user.id,
-      productStockDtos,
-    });
-    const response = await createOrderWithPayment({
-      accountId: "7679876c-7414-44ba-aff6-960fe6739c05",
-      productStockDtos,
-    });
-    if (response.isSuccess) {
-      toast.success("Đặt hàng thành công");
-      dispatch(deleteCart());
-      window.location.href = response.result;
-    } else {
-      toast.error("Đặt hàng thất bại");
+    if (cartList.length > 0 && user != null) {
+      if (selectedMethod === "vnpay") {
+        const response = await createOrderWithPayment({
+          accountId: user.id,
+          productStockDtos,
+        });
+        if (response.isSuccess) {
+          toast.success("Đặt hàng thành công");
+          dispatch(deleteCart());
+          window.location.href = response.result;
+        } else {
+          toast.error("Đặt hàng thất bại");
+        }
+      } else {
+        const response = await createOrderCOD({
+          accountId: user.id,
+          productStockDtos,
+        });
+        if (response.isSuccess) {
+          toast.success("Đặt hàng thành công");
+          dispatch(deleteCart());
+          navigate("/");
+        } else {
+          toast.error("Đặt hàng thất bại");
+        }
+      }
     }
+  };
+
+  const log = (data) => {
+    setSelectedMethod(data);
   };
   return (
     <div className="container mx-auto py-8">
@@ -63,19 +81,19 @@ const Cart = () => {
                   </div>
                   <div className="flex items-center mb-2">
                     <span className="font-semibold mr-2">Email:</span>
-                    <span>{user.email}</span>
+                    <span>{user?.email}</span>
                   </div>
                   <div className="flex items-center mb-2">
                     <span className="font-semibold mr-2">Số điện thoại:</span>
-                    <span>{user.phoneNumber}</span>
+                    <span>{user?.phoneNumber}</span>
                   </div>
                   <div className="flex items-center mb-2">
                     <span className="font-semibold mr-2">Giới tính:</span>
-                    <span>{user.gender ? "Nam" : "Nữ"}</span>
+                    <span>{user?.gender ? "Nam" : "Nữ"}</span>
                   </div>
                   <div className="flex items-center">
                     <span className="font-semibold mr-2">Địa chỉ:</span>
-                    <span>{user.address}</span>
+                    <span>{user?.address}</span>
                   </div>
                 </div>
               </div>
@@ -176,18 +194,23 @@ const Cart = () => {
               })}
             </div>
 
-            <div className="bg-gray-100 p-4 rounded-md shadow-md">
-              <h2 className="text-xl font-bold mb-4">Giỏ hàng</h2>
+            <div className=" rounded-box p-6">
+              <PaymentMethod log={log} />
+
+              <div className="divider"></div>
+
               <div className="flex justify-between items-center mb-4">
-                <h4 className="font-bold">Tổng tiền:</h4>
-                <h3 className="text-xl font-bold">{formatPrice(totalPrice)}</h3>
+                <h2 className="text-xl font-bold">Giỏ hàng</h2>
+                <h3 className="text-xl font-bold">
+                  Tổng tiền: {formatPrice(totalPrice)}
+                </h3>
               </div>
             </div>
           </div>
 
           <div className="flex justify-end">
             <button
-              className="bg-primary text-white text-end px-4 py-2 mt-4 rounded-md shadow-md"
+              className="bg-primary text-white text-end px-4 py-2 mt-4 rounded-md shadow-md mx-4"
               onClick={checkOut}
             >
               Đặt hàng

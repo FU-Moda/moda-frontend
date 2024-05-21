@@ -46,16 +46,16 @@ const Product = () => {
               </div>
               <div class="flex-grow">
                 <div class="flex justify-between items-center mb-2">
-                  <h3 class="text-lg font-semibold">LeMode</h3>
+                  <h3 class="text-lg font-semibold">
+                    {selectedProduct?.product?.shop?.name}
+                  </h3>
                   <NavLink
                     to={`/shop-detail/${selectedProduct?.product?.shopId}`}
                   >
                     Xem Shop
                   </NavLink>
                 </div>
-                <p class="text-gray-600 mb-2">
-                  {selectedProduct?.product?.shop?.name}
-                </p>
+
                 <div class="flex items-center mb-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

@@ -13,17 +13,24 @@ import {
 const ProductDetails = ({ selectedProduct }) => {
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState({});
-  const [stock, setStock] = useState({});
+  const [selectedSize, setSelectedSize] = useState(-1);
+  const [stock, setStock] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(
+    selectedProduct.staticFile?.[0]?.img || ""
+  );
+
+  const handleImageClick = (img) => {
+    setSelectedImage(img);
+  };
 
   const handleQuantityChange = (e) => {
     setQuantity(e.target.value);
   };
   const handleSizeChange = (e) => {
     setSelectedSize(e.target.value);
+    console.log(e.target.value);
   };
 
-  console.log(stock);
   useEffect(() => {
     getSelectedPrice();
 
@@ -37,36 +44,48 @@ const ProductDetails = ({ selectedProduct }) => {
   }, [selectedSize]);
 
   const handleAdd = (productItem, productStock, quantity) => {
-    console.log(selectedSize);
+    const productStockFilter = selectedProduct.productStock?.filter(
+      (item) =>
+        (item.clothingSize && item.clothingSize) ||
+        (item.shoeSize && item.shoeSize)
+    )[0];
     console.log({
       productItem: productItem,
-      productStock: productStock,
+      productStock: productStock ? productStock : productStockFilter,
       num: quantity,
     });
     dispatch(
       addToCart({
         productItem: productItem,
-        productStock: productStock,
-        num: quantity,
+        productStock: productStock ? productStock : productStockFilter,
+        num: Number(quantity),
       })
     );
-    toast.success("Product has been added to cart!");
+    toast.success("Sản phẩm đã được thêm vào giỏ hàng!");
   };
+
   const renderSizeOptions = () => {
     if (selectedProduct?.product?.clothType === 4) {
       // Render shoe size options
       return (
-        <div className="mb-4">
-          <label htmlFor="size" className="block mb-2">
-            Size:
+        <div className="form-control w-full max-w-xs mb-4">
+          <label className="label">
+            <span className="label-text">Size:</span>
           </label>
           <select
             id="size"
-            value={selectedSize || ""}
+            value={
+              selectedSize !== -1
+                ? selectedSize
+                : selectedProduct?.productStock?.[0].shoeSize
+            }
             onChange={handleSizeChange}
-            className="border border-black rounded-md px-3 py-2"
+            className="select select-bordered"
           >
-            <option value="">Select a size</option>
+            <option value={-1} checked>
+              Select a size
+            </option>
+
             {selectedProduct?.productStock?.map((stock) => (
               <option key={stock.shoeSize} value={stock.shoeSize}>
                 {shoeSizeLabels[stock.shoeSize]}
@@ -78,17 +97,23 @@ const ProductDetails = ({ selectedProduct }) => {
     } else {
       // Render clothing size options
       return (
-        <div className="mb-4">
-          <label htmlFor="size" className="block mb-2">
-            Size:
+        <div className="form-control w-full max-w-xs mb-4">
+          <label className="label">
+            <span className="label-text">Size:</span>
           </label>
           <select
             id="size"
-            value={selectedSize || ""}
+            value={
+              selectedSize != -1
+                ? selectedSize
+                : selectedProduct?.productStock?.[0].clothingSize
+            }
             onChange={handleSizeChange}
-            className="border border-black rounded-md px-3 py-2"
+            className="select select-bordered"
           >
-            <option value="">Select a size</option>
+            <option value={-1} checked>
+              Select a size
+            </option>
             {selectedProduct?.productStock?.map((stock) => (
               <option key={stock.clothingSize} value={stock.clothingSize}>
                 {clothingSizeLabels[stock.clothingSize]}
@@ -99,7 +124,7 @@ const ProductDetails = ({ selectedProduct }) => {
       );
     }
   };
-  console.log(selectedSize);
+
   const getSelectedPrice = () => {
     if (!selectedProduct || !selectedProduct?.productStock) {
       return "";
@@ -112,36 +137,36 @@ const ProductDetails = ({ selectedProduct }) => {
         ? stock.shoeSize === Number(selectedSize)
         : stock.clothingSize === Number(selectedSize)
     );
-    // console.log(matchingStock);
 
     return matchingStock ? formatPrice(matchingStock.price) : "";
   };
+
   return (
     <section className="container mx-auto py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         <div className="rounded-md shadow-lg">
           <div className="mb-10 w-full h-80">
-            {selectedProduct?.staticFile &&
-              selectedProduct.staticFile.length > 0 && (
-                <img
-                  src={selectedProduct.staticFile[0]?.img}
-                  alt=""
-                  className="w-full h-full object-contain"
-                />
-              )}
+            {selectedImage && (
+              <img
+                src={selectedImage}
+                alt=""
+                className="w-full h-full object-contain"
+              />
+            )}
           </div>
 
-          <div className="grid grid-cols-4 gap-4">
-            <div className="w-24 h-24 border p-2 m-4 shadow-md">
-              {selectedProduct?.staticFile &&
-                selectedProduct.staticFile.length > 0 && (
-                  <img
-                    src={selectedProduct.staticFile[0]?.img}
-                    alt=""
-                    className="w-full h-full "
-                  />
-                )}
-            </div>
+          <div className="flex justify-center">
+            {selectedProduct?.staticFile &&
+              selectedProduct.staticFile.length > 0 &&
+              selectedProduct.staticFile.map((item) => (
+                <div
+                  key={item.img}
+                  className="w-24 h-24 p-2 shadow-md rounded-md cursor-pointer"
+                  onClick={() => handleImageClick(item.img)}
+                >
+                  <img src={item.img} alt="" className="w-full h-full" />
+                </div>
+              ))}
           </div>
         </div>
 
@@ -150,55 +175,70 @@ const ProductDetails = ({ selectedProduct }) => {
             {selectedProduct?.product?.name}
           </h2>
           <div className="flex items-center mb-4">
-            <div className="flex">
+            <div className="rating rating-sm">
               {[...Array(5)].map((_, index) => (
-                <i
+                <input
                   key={index}
-                  className="fa-solid fa-star text-yellow-300 text-lg"
-                ></i>
+                  type="radio"
+                  name="rating-7"
+                  className="mask mask-star-2 bg-orange-400"
+                  checked
+                  readOnly
+                />
               ))}
             </div>
             {/* <span className="ml-2">{selectedProduct?.avgRating} ratings</span> */}
           </div>
           <div className="flex flex-col gap-4 mb-4">
             <span className="text-xl font-semibold">
-              <span className="text-xl font-semibold">
-                {getSelectedPrice() ||
-                  formatPrice(selectedProduct?.productStock?.[0]?.price)}
-              </span>{" "}
+              {getSelectedPrice() ||
+                formatPrice(
+                  stock
+                    ? stock.price
+                    : selectedProduct?.productStock?.[0]?.price
+                )}
             </span>
             {renderSizeOptions()}
 
-            <div className="flex">
-              <span className="block"> Phân loại:</span>
-              <span className="block mx-2">
-                {clothTypeLabels[selectedProduct?.product?.clothType]}{" "}
+            <div className="flex items-center">
+              <span className="badge badge-ghost">
+                {clothTypeLabels[selectedProduct?.product?.clothType]}
+              </span>
+              <span className="badge badge-ghost mx-2 ">
+                {genderLabels[selectedProduct?.product?.gender]}
               </span>
             </div>
-            <div className="flex">
-              <span className="block">Dành cho:</span>
-              <span className="block mx-2">
-                {genderLabels[selectedProduct?.product?.gender]}
+            <div className="flex items-center">
+              <span className="badge badge-error text-white py-4">
+                {stock
+                  ? stock.quantity
+                  : selectedProduct?.productStock?.[0]?.quantity}{" "}
+                sản phẩm còn lại
               </span>
             </div>
           </div>
 
           <p className="mb-4">{selectedProduct?.shortDesc}</p>
-          <input
-            className="border border-black rounded-md px-3 py-2 mb-4 text-sm w-20"
-            type="number"
-            placeholder="Qty"
-            value={quantity}
-            onChange={handleQuantityChange}
-          />
-          <button
-            aria-label="Add"
-            type="submit"
-            className="bg-[#0f3460] mx-8 text-white px-4 py-2 rounded-md hover:bg-[#0c2c4d] transition-colors duration-300"
-            onClick={() => handleAdd(selectedProduct, stock, quantity)}
-          >
-            Thêm vào giỏ hàng
-          </button>
+          <div className="flex items-center mb-4">
+            <div className="form-control w-24">
+              <input
+                type="number"
+                placeholder="Số lượng"
+                value={quantity}
+                onChange={handleQuantityChange}
+                className="input input-bordered"
+              />
+            </div>
+            <button
+              aria-label="Add"
+              type="submit"
+              className="btn text-white bg-primary ml-4"
+              onClick={() => handleAdd(selectedProduct, stock, quantity)}
+            >
+              <i className="fa-solid fa-cart-arrow-down"></i>
+              Thêm vào giỏ hàng
+            </button>
+          </div>
         </div>
       </div>
     </section>

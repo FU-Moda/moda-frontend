@@ -30,7 +30,7 @@ const RatingComponent = ({ id }) => {
   }, [id]);
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
+    <div className="bg-white rounded-lg shadow-xl p-6 my-10">
       <h3 className="text-xl font-semibold mb-4">Đánh giá sản phẩm</h3>
       <div className="flex items-center mb-4">
         {[1, 2, 3, 4, 5].map((value) => (
