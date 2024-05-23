@@ -5,6 +5,7 @@ import { logout } from "../../redux/features/authSlice";
 import { toast } from "react-toastify";
 import { decode } from "../../utils/jwtUtil";
 import { clothTypeLabels } from "../../utils/constant";
+import { isEmptyObject } from "../../utils/util";
 
 const NavBar = () => {
   const { user } = useSelector((state) => state.user || {});
@@ -174,16 +175,15 @@ const NavBar = () => {
               Giỏ hàng
             </Link>
 
-            {user ? (
-              renderDropDown()
-            ) : (
-              <Link
-                to="/login"
-                className="hidden md:block no-underline text-primary"
-              >
-                Đăng nhập
-              </Link>
-            )}
+            {isEmptyObject(user) ||
+              (user == null && (
+                <Link
+                  to="/login"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
+                >
+                  Đăng nhập
+                </Link>
+              ))}
           </div>
         </div>
       )}

@@ -70,5 +70,13 @@ function differenceInDays(ngayGio1, ngayGio2) {
 
   return difference;
 }
-
-export { formatPrice, formatDateTime, formatDate, differenceInDays };
+function isEmptyObject(v) {
+  return !!v && v.constructor === Object && Object.keys(v).length === 0;
+}
+export {
+  formatPrice,
+  formatDateTime,
+  formatDate,
+  differenceInDays,
+  isEmptyObject,
+};
