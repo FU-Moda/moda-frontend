@@ -19,7 +19,7 @@ const ManagementHeader = () => {
               MODA
             </span>
           </NavLink>
-          <div className={`${isOpen ? "mx-20" : ""}  px-4 py-2`}>
+          <div className={`${isOpen ? "mx-10" : ""}  px-4 py-2`}>
             <button
               className="btn btn-ghost btn-sm rounded-btn"
               onClick={handleToggleSidebar}
