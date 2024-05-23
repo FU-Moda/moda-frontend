@@ -19,13 +19,20 @@ const ManagementHeader = () => {
               MODA
             </span>
           </NavLink>
-          <div className={`${isOpen ? "mx-10" : ""}  px-4 py-2`}>
-            <button
+          <div className={`${isOpen ? " m-0 md:mx-10" : ""}  px-4 py-2`}>
+            {/* <button
               className="btn btn-ghost btn-sm rounded-btn"
               onClick={handleToggleSidebar}
             >
               <i className="fa-solid fa-bars"></i>
-            </button>
+             
+            </button> */}
+            <label
+              htmlFor="my-drawer-2"
+              className=" bg-white text-primary drawer-button lg:hidden"
+            >
+              <i className="fa-solid fa-bars"></i>
+            </label>
           </div>
         </div>
         <div class="navbar-end">

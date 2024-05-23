@@ -156,8 +156,8 @@ const ShopDashboard = () => {
               </table>
             </div>
           </div>
-          <div className="col-span-1 max-w-md mx-auto">
-            <Doughnut data={chartData} width={400} height={300} />
+          <div className="col-span-1 w-full md:max-w-md mx-auto">
+            <Doughnut data={chartData} className="w-full h-auto" />
           </div>
         </div>
       </div>

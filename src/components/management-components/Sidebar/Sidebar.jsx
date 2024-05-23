@@ -95,8 +95,8 @@ const SideBar = () => {
   };
 
   return (
-    <div className="flex">
-      <div
+    <div className="">
+      {/* <div
         className={`bg-white text-text-color my-4 shadow-lg rounded-lg transition-all duration-300 ${
           isOpen ? "w-64" : "w-20"
         }`}
@@ -104,6 +104,22 @@ const SideBar = () => {
         <ul className={`menu p-4 w-full text-base-content`}>
           {roleName && renderMenu(menuItems[roleName])}
         </ul>
+      </div> */}
+      <div className="drawer lg:drawer-open">
+        <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+        <div className="drawer-content flex flex-col items-center justify-center">
+          {/* Page content here */}
+        </div>
+        <div className="drawer-side z-50">
+          <label
+            htmlFor="my-drawer-2"
+            aria-label="close sidebar"
+            className="drawer-overlay"
+          ></label>
+          <ul className="menu p-4 w-60 min-h-full  bg-white text-base-content">
+            {roleName && renderMenu(menuItems[roleName])}
+          </ul>
+        </div>
       </div>
     </div>
   );
