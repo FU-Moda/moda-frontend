@@ -18,6 +18,7 @@ import { ManagementOrder } from "../pages/Management/Shop/ManagementOrder";
 import Ship from "../pages/Order/Ship";
 import ProductForm from "../pages/Management/Shop/Modal/ProductForm";
 import PersonalInformation from "../pages/Common/PersonalInformation";
+import ShopDashboard from "../pages/Management/Shop/ShopDashboard";
 const ProtectedRouteAuth = ({ children }) => {
   const role = decode(localStorage.getItem("accessToken"));
   if (role !== "isStaff" && role != "isAdmin") {
@@ -85,6 +86,7 @@ function Routers() {
         </ProtectedRouteAdmin>
       ),
       children: [
+        { index: true, element: <Navigate to="dashboard" replace /> },
         {
           path: "dashboard",
           element: (
@@ -109,6 +111,10 @@ function Routers() {
             </ProtectedRouteAdmin>
           ),
         },
+        {
+          path: "settings",
+          element: <ProtectedRouteAdmin></ProtectedRouteAdmin>,
+        },
       ],
     },
     {
@@ -119,7 +125,9 @@ function Routers() {
         </ProtectedRouteShop>
       ),
       children: [
-        { path: "dashboard", element: <AdminDashboard /> },
+        { index: true, element: <Navigate to="dashboard" replace /> },
+
+        { path: "dashboard", element: <ShopDashboard /> },
         {
           path: "product",
           element: (

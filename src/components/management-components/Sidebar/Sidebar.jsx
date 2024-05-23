@@ -43,8 +43,8 @@ const SideBar = () => {
       },
       {
         name: "Cấu hình hệ thống",
-        icon: <i className="fa-solid fa-money-bill"></i>,
-        path: "pricing",
+        icon: <i className="fa-solid fa-gear"></i>,
+        path: "settings",
       },
     ],
     isStaff: [

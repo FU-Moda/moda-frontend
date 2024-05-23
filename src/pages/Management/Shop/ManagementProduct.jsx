@@ -13,10 +13,11 @@ const ManagementProduct = () => {
     setIsLoading(true);
     const data = await getProductByShopId(shop.id, 1, 10);
     if (data.isSuccess) {
-      setProducts(data.result.items);
+      setIsLoading(false);
+      setProducts(data.result?.items);
     }
-    setIsLoading(false);
   };
+  console.log(isLoading);
   useEffect(() => {
     fetchData();
   }, [shop]);

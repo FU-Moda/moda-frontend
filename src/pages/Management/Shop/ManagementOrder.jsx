@@ -15,8 +15,7 @@ export const ManagementOrder = () => {
     setIsLoading(true);
     const data = await getAllOrderByShopId(shop.id, 1, 10);
     if (data.isSuccess) {
-      setOrders(data.result.items);
-      console.log(data.result.items);
+      setOrders(data.result?.items);
     }
     setIsLoading(false);
   };

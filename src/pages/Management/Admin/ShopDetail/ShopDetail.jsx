@@ -42,9 +42,9 @@ export const ShopDetail = () => {
     ]);
     if (shopData.isSuccess && productData.isSuccess) {
       setShop(shopData.result?.shop);
-      setProducts(productData.result.items);
+      setProducts(productData.result?.items);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
   useEffect(() => {
     fetchData();

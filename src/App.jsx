@@ -16,6 +16,9 @@ import { AuthProvider } from "./context/AuthContext";
 AOS.init({
   duration: 1000,
 });
+import { registerables } from "chart.js";
+import Chart from "chart.js/auto";
+Chart.register(...registerables);
 
 function App() {
   return (
