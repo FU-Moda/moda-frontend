@@ -9,16 +9,17 @@ const Footer = () => {
             <h1 className="text-2xl font-bold text-primary">Moda</h1>
           </div>
           <p className="opacity-50 mb-5">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Auctor
-            libero id et, in gravida. Sit diam duis mauris nulla cursus. Erat et
-            lectus vel ut sollicitudin elit at amet.
+            "Dọn dẹp - Kiếm tiền - Mua sắm"
+            <br />
+            Tất cả trong một
           </p>
         </div>
         <div className="px-5 ">
           <h2 className="text-xl mb-5 text-primary">Về chúng tôi</h2>
           <ul className="opacity-50">
-            <li className="mb-2">Facebook</li>
-            <li className="mb-2">Instagram</li>
+            <li className="mb-2">
+              <a href="https://www.facebook.com/modareinvented">Facebook</a>
+            </li>
             <li className="mb-2">Tiktok</li>
           </ul>
         </div>
