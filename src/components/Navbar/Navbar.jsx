@@ -173,6 +173,17 @@ const NavBar = () => {
             >
               Giỏ hàng
             </Link>
+
+            {user ? (
+              renderDropDown()
+            ) : (
+              <Link
+                to="/login"
+                className="hidden md:block no-underline text-primary"
+              >
+                Đăng nhập
+              </Link>
+            )}
           </div>
         </div>
       )}
