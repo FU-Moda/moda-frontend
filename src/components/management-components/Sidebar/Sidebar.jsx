@@ -76,7 +76,7 @@ const SideBar = () => {
   const renderMenu = (items) => {
     return items.map((item, index) => (
       <NavLink to={`${item.path}`} key={index}>
-        <li className="hover:bg-primary rounded-md hover:text-white my-1">
+        <li className="hover:bg-primary rounded-md text-black hover:text-white my-1">
           <a
             className={`flex items-center ${
               location.pathname?.includes(item.path)
