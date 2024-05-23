@@ -110,7 +110,7 @@ const SideBar = () => {
         <div className="drawer-content flex flex-col items-center justify-center">
           {/* Page content here */}
         </div>
-        <div className="drawer-side z-50">
+        <div className="drawer-side z-10 shadow-lg  rounded-4xl">
           <label
             htmlFor="my-drawer-2"
             aria-label="close sidebar"
