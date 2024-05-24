@@ -26,7 +26,7 @@ const NavBar = () => {
     if (localStorage.getItem("accessToken")) {
       setRoleName(decode(localStorage.getItem("accessToken")).role);
     }
-  }, []);
+  }, [localStorage.getItem("accessToken")]);
 
   const handleLogOut = () => {
     localStorage.removeItem("accessToken");
@@ -35,7 +35,7 @@ const NavBar = () => {
     navigate("/");
     toast.success("Đăng xuất thành công");
   };
-
+  console.log(roleName);
   const renderDropDown = () => {
     return (
       <div className="dropdown dropdown-end">
