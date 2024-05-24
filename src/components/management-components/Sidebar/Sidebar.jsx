@@ -75,22 +75,24 @@ const SideBar = () => {
 
   const renderMenu = (items) => {
     return items.map((item, index) => (
-      <NavLink to={`${item.path}`} key={index}>
-        <li className="hover:bg-primary rounded-md text-black hover:text-white my-1">
-          <a
-            className={`flex items-center ${
-              location.pathname?.includes(item.path)
-                ? "bg-primary text-white"
-                : ""
-            }`}
-          >
-            {item.icon}
-            <span className={`${isOpen ? "inline" : "hidden"} ml-2 text-md`}>
-              {item.name}
-            </span>
-          </a>
-        </li>
-      </NavLink>
+      <>
+        <NavLink to={`${item.path}`} key={index}>
+          <li className="hover:bg-primary rounded-md text-black hover:text-white my-1">
+            <a
+              className={`flex items-center ${
+                location.pathname?.includes(item.path)
+                  ? "bg-primary text-white"
+                  : ""
+              }`}
+            >
+              {item.icon}
+              <span className={`${isOpen ? "inline" : "hidden"} ml-2 text-md`}>
+                {item.name}
+              </span>
+            </a>
+          </li>
+        </NavLink>
+      </>
     ));
   };
 
@@ -107,19 +109,15 @@ const SideBar = () => {
       </div> */}
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content flex flex-col items-center justify-center">
-          {/* Page content here */}
-        </div>
+
         <div className="drawer-side z-10 shadow-lg  rounded-4xl">
           <label
             htmlFor="my-drawer-2"
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
+
           <ul className="menu p-4 w-60 min-h-full  bg-white text-base-content">
-            <li className="  text-primary my-4 font-bold text-2xl ">
-              <NavLink to="/">MODA</NavLink>
-            </li>
             {roleName && renderMenu(menuItems[roleName])}
           </ul>
         </div>
