@@ -117,6 +117,9 @@ const SideBar = () => {
             className="drawer-overlay"
           ></label>
           <ul className="menu p-4 w-60 min-h-full  bg-white text-base-content">
+            <li className="  text-primary my-4 font-bold text-2xl ">
+              <NavLink to="/">MODA</NavLink>
+            </li>
             {roleName && renderMenu(menuItems[roleName])}
           </ul>
         </div>

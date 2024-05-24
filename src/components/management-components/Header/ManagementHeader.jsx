@@ -14,26 +14,17 @@ const ManagementHeader = () => {
     <>
       <header class="navbar bg-base-100 shadow-md text-grey py-4">
         <div class="navbar-start">
+          <label
+            htmlFor="my-drawer-2"
+            className="mx-10 bg-white text-primary drawer-button lg:hidden cursor-pointer"
+          >
+            <i className="fa-solid fa-bars"></i>
+          </label>
           <NavLink to={"/"}>
-            <span className="mx-10 normal-case text-xl font-bold text-primary">
+            <span className=" normal-case text-xl font-bold text-primary">
               MODA
             </span>
           </NavLink>
-          <div className={`${isOpen ? " m-0 md:mx-10" : ""}  px-4 py-2`}>
-            {/* <button
-              className="btn btn-ghost btn-sm rounded-btn"
-              onClick={handleToggleSidebar}
-            >
-              <i className="fa-solid fa-bars"></i>
-             
-            </button> */}
-            <label
-              htmlFor="my-drawer-2"
-              className=" bg-white text-primary drawer-button lg:hidden"
-            >
-              <i className="fa-solid fa-bars"></i>
-            </label>
-          </div>
         </div>
         <div class="navbar-end">
           <button class="btn btn-ghost btn-circle">
