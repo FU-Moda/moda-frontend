@@ -21,6 +21,7 @@ import PersonalInformation from "../pages/Common/PersonalInformation";
 import ShopDashboard from "../pages/Management/Shop/ShopDashboard";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import VerifyPayment from "../pages/Common/VerifyPayment";
+import SignUpShop from "../pages/Management/Shop/SignUpShop";
 const ProtectedRouteAuth = ({ children }) => {
   const role = decode(localStorage.getItem("accessToken"));
   if (role !== "isStaff" && role != "isAdmin") {
@@ -74,6 +75,7 @@ function Routers() {
       children: [
         { index: true, element: <Home /> },
         { path: "login", element: <LoginPage /> },
+        { path: "sign-up-shop", element: <SignUpShop /> },
         { path: "cart", element: <Cart /> },
         { path: "product/:id", element: <Shop /> },
         { path: "shop/:id", element: <Product /> },

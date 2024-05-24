@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase/firebase.config";
 import {
   activeAccount,
@@ -183,7 +183,7 @@ const LoginPage = () => {
                       for (var i = 0; i < data.messages.length; i++) {
                         toast.error(data.messages[i]);
                         if (
-                          data.messages[i] == "The account is not verified !"
+                          data.messages[i] == "Tài khoản chưa được xác thực"
                         ) {
                           setEmail(values.email);
                           setIsModalVisible(true);
@@ -265,6 +265,17 @@ const LoginPage = () => {
                         {" "}
                         Đăng kí ở đây
                       </a>
+                    </div>
+                    <div className=" mt-4 text-center text-gray-400">
+                      Bạn muốn trở thành cộng tác viên với MODA?
+                      <NavLink
+                        style={{ cursor: "pointer" }}
+                        className="font-bold text-black "
+                        to={"/sign-up-shop"}
+                      >
+                        {" "}
+                        Đăng kí ở đây
+                      </NavLink>
                     </div>
                   </Form>
                 )}

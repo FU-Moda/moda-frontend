@@ -21,3 +21,14 @@ export const getShopByAccountId = async (accountId) => {
     console.log(error);
   }
 };
+export const createShopAccount = async (data) => {
+  try {
+    const response = await axios.post(
+      `${baseUrl}/account/create-shop-account/`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
