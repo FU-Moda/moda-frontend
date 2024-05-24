@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getProductByShopId } from "../../../api/productApi";
 import { TableProduct } from "../../../components/management-components/TableProduct/TableProduct";
-import Loader from "../../../components/Loader/Loader";
+import LoadingComponent from "../../../components/LoadingComponent/LoadingComponent";
 import { NavLink } from "react-router-dom";
 const ManagementProduct = () => {
   const { shop } = useSelector((state) => state.shop || {});
@@ -23,7 +23,7 @@ const ManagementProduct = () => {
   }, [shop]);
   return (
     <>
-      <Loader isLoading={isLoading} />
+      <LoadingComponent isLoading={isLoading} />
       <h1 className="text-center text-2xl font-semibold uppercase text-primary">
         Quản lý sản phẩm
       </h1>

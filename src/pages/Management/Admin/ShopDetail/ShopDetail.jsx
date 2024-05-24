@@ -5,7 +5,7 @@ import {
   getRatingByProductId,
   getShopById,
 } from "../../../../api/productApi";
-import Loader from "../../../../components/Loader/Loader";
+import LoadingComponent from "../../../../components/LoadingComponent/LoadingComponent";
 import { ProductDetailModal } from "./ProductDetailModal";
 import { clothTypeLabels } from "../../../../utils/constant";
 import RatingComponent from "../../../../components/Rating/RatingComponent";
@@ -51,7 +51,7 @@ export const ShopDetail = () => {
   }, [id]);
   return (
     <>
-      <Loader isLoading={isLoading} />
+      <LoadingComponent isLoading={isLoading} />
       {!isLoading && (
         <>
           <div className="bg-white rounded-md shadow-md p-6 mb-8">

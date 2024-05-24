@@ -5,7 +5,7 @@ import {
   getProductStockByProductId,
   getRatingByProductId,
 } from "../../../api/productApi";
-import Loader from "../../../components/Loader/Loader";
+import LoadingComponent from "../../../components/LoadingComponent/LoadingComponent";
 import { decode } from "../../../utils/jwtUtil";
 import { ProductStockModal } from "../ProductStock/ProductStockModal";
 export const TableProduct = ({ products }) => {
@@ -44,7 +44,7 @@ export const TableProduct = ({ products }) => {
 
   return (
     <>
-      <Loader isLoading={isLoading} />
+      <LoadingComponent isLoading={isLoading} />
       <div className="overflow-x-auto shadow-md rounded-md">
         <table className="table table-compact w-full">
           <thead>

@@ -7,7 +7,7 @@ import ShopList from "../components/ShopList";
 import Banner from "../components/Banner/Banner";
 import useWindowScrollToTop from "../hooks/useWindowScrollToTop";
 import { getAllProduct, getAllProductByFilter } from "../api/productApi";
-import Loader from "../components/Loader/Loader";
+import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 import { useParams } from "react-router-dom";
 
 const Shop = () => {
@@ -39,7 +39,7 @@ const Shop = () => {
 
   return (
     <Fragment>
-      <Loader isLoading={isLoading} />
+      <LoadingComponent isLoading={isLoading} />
       <Banner title="Sản Phẩm" />
 
       <section className="mt-10 filter-bar">

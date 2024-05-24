@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllShop } from "../../../api/shopApi";
 import { useNavigate } from "react-router-dom";
-import Loader from "../../../components/Loader/Loader";
+import LoadingComponent from "../../../components/LoadingComponent/LoadingComponent";
 export const ManagementShop = () => {
   const [listShop, setListShop] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +22,7 @@ export const ManagementShop = () => {
       <h1 className="text-center text-primary font-bold text-xl uppercase">
         Quản lý đối tác
       </h1>
-      <Loader isLoading={isLoading} />
+      <LoadingComponent isLoading={isLoading} />
       <div className="overflow-x-auto mt-4 shadow-lg rounded-md">
         <table className="table w-full">
           <thead>

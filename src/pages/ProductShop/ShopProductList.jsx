@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { getProductByShopId, getShopById } from "../../api/productApi";
 import { formatPrice } from "../../utils/util";
-import Loader from "../../components/Loader/Loader";
+import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
 const ShopProductList = () => {
   const { id } = useParams();
   const [shop, setShop] = useState(null);
@@ -26,7 +26,7 @@ const ShopProductList = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Loader isLoading={isLoading} />
+      <LoadingComponent isLoading={isLoading} />
       {!isLoading && (
         <>
           <div className="bg-white rounded-md shadow-md p-6 mb-8">

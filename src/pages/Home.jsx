@@ -6,6 +6,7 @@ import SliderHome from "../components/Slider";
 import useWindowScrollToTop from "../hooks/useWindowScrollToTop";
 import ShopList from "../components/ShopList";
 import { getAllProduct } from "../api/productApi";
+import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -30,6 +31,7 @@ const Home = () => {
 
   return (
     <>
+      <LoadingComponent isLoading={isLoading} />
       <SliderHome />
       <div className="container">
         <ShopList productItems={products} />

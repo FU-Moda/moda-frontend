@@ -17,7 +17,7 @@ import {
 import { toast } from "react-toastify";
 import { decode } from "../../utils/jwtUtil";
 import { login } from "../../redux/features/authSlice";
-import Loader from "../../components/Loader/Loader";
+import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
 import { getShopByAccountId } from "../../api/shopApi";
 import { setShop } from "../../redux/features/shopSlice";
 const LoginSchema = Yup.object().shape({
@@ -116,7 +116,7 @@ const LoginPage = () => {
   }, [user]);
   return (
     <>
-      <Loader isLoading={isLoading} />
+      <LoadingComponent isLoading={isLoading} />
       <div className="flex items-center justify-center min-h-screen bg-base2">
         <div className="relative flex flex-col m-6 space-y-8 shadow-2xl rounded-2xl md:flex-row md:space-y-0">
           <div className="flex flex-col justify-center p-8 md:p-14">

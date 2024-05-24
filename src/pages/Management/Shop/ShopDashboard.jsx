@@ -7,7 +7,7 @@ import {
 } from "../../../api/dashboardApi";
 import { formatPrice } from "../../../utils/util";
 import { useSelector } from "react-redux";
-import Loader from "../../../components/Loader/Loader";
+import LoadingComponent from "../../../components/LoadingComponent/LoadingComponent";
 import { clothTypeLabels, genderLabels } from "../../../utils/constant";
 const ShopDashboard = () => {
   const [dataRevenue, setDataRevenue] = useState({});
@@ -71,7 +71,7 @@ const ShopDashboard = () => {
   };
   return (
     <>
-      <Loader loading={isLoading} />
+      <LoadingComponent loading={isLoading} />
       <div className="container mx-auto py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-white shadow-md rounded-lg p-4">

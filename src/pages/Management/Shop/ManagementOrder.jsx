@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getAllOrderByShopId } from "../../../api/orderApi";
-import Loader from "../../../components/Loader/Loader";
+import LoadingComponent from "../../../components/LoadingComponent/LoadingComponent";
 import { orderLabels } from "../../../utils/constant";
 import OrderModal from "../Shop/Modal/OrderModal";
 export const ManagementOrder = () => {
@@ -33,7 +33,7 @@ export const ManagementOrder = () => {
   };
   return (
     <>
-      <Loader isLoading={isLoading} />
+      <LoadingComponent isLoading={isLoading} />
       <h1 className="text-center text-primary font-bold text-2xl uppercase my-4">
         Quản lý đơn hàng
       </h1>

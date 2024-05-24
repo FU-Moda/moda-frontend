@@ -8,7 +8,7 @@ import ProductDetails from "../components/ProductDetails/ProductDetails";
 import ProductReviews from "../components/ProductReviews/ProductReviews";
 import useWindowScrollToTop from "../hooks/useWindowScrollToTop";
 import { getProductById } from "../api/productApi";
-import Loader from "../components/Loader/Loader";
+import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 import RatingComponent from "../components/Rating/RatingComponent";
 const Product = () => {
   const { id } = useParams();
@@ -29,7 +29,7 @@ const Product = () => {
 
   return (
     <Fragment>
-      <Loader isLoading={isLoading} />
+      <LoadingComponent isLoading={isLoading} />
       {isLoading === false && (
         <>
           <Banner title={selectedProduct?.product?.name} />

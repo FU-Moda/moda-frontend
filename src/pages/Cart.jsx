@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { deleteCart } from "../redux/features/cartSlice";
 import PaymentMethod from "../components/PaymentMethod/PaymentMethod";
 import { useNavigate } from "react-router-dom";
-import Loader from "../components/Loader/Loader";
+import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 const Cart = () => {
   const { cartList } = useSelector((state) => state.cart || []);
   const { user } = useSelector((state) => state.user || {});
@@ -76,7 +76,7 @@ const Cart = () => {
   };
   return (
     <div className="container mx-auto py-8">
-      <Loader isLoading={loading} />
+      <LoadingComponent isLoading={loading} />
       {user ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2gap-8">
