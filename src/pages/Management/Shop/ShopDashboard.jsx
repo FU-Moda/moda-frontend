@@ -29,8 +29,8 @@ const ShopDashboard = () => {
       setDataUser(responseUser.result);
       setDataProduct(responseProduct.result?.productReports);
       console.log(responseUser);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
   useEffect(() => {
     fetchData();
@@ -71,7 +71,7 @@ const ShopDashboard = () => {
   };
   return (
     <>
-      <LoadingComponent loading={isLoading} />
+      <LoadingComponent isLoading={isLoading} />
       <div className="container mx-auto py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-white shadow-md rounded-lg p-4">

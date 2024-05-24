@@ -2,8 +2,12 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 
 const spin = keyframes`
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 `;
 
 const LoadingContainer = styled.div`
@@ -13,6 +17,7 @@ const LoadingContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.7);
@@ -24,9 +29,8 @@ const LoadingSpinner = styled.div`
   height: 80px;
   border-radius: 50%;
   border: 8px solid transparent;
-  border-top-color: #3498db;
+  border-top-color: #2ecc71; /* Màu xanh lá */
   animation: ${spin} 2s linear infinite;
-
   &:before {
     content: "";
     position: absolute;
@@ -36,8 +40,28 @@ const LoadingSpinner = styled.div`
     bottom: 5px;
     border-radius: 50%;
     border: 8px solid transparent;
-    border-top-color: #2ecc71;
+    border-top-color: #ffffff; /* Màu trắng */
     animation: ${spin} 1.5s linear infinite reverse;
+  }
+`;
+
+const LoadingText = styled.p`
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 20px;
+  animation: blink 1s infinite;
+
+  @keyframes blink {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 `;
 
@@ -45,6 +69,7 @@ const LoadingComponent = ({ isLoading }) => {
   return isLoading ? (
     <LoadingContainer>
       <LoadingSpinner />
+      <LoadingText>Moda đang tải dữ liệu bạn chờ xíu nhé...</LoadingText>
     </LoadingContainer>
   ) : null;
 };
