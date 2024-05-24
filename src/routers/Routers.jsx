@@ -72,7 +72,7 @@ function Routers() {
       path: "*",
       element: <ErrorPage />,
     },
-    { path: "/payment/*", element: <VerifyPayment /> },
+    { path: "/verify-payment/*", element: <VerifyPayment /> },
 
     {
       path: "/",
