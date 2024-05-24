@@ -65,10 +65,6 @@ const ProtectedRouteShop = ({ children }) => {
 function Routers() {
   const routing = useRoutes([
     {
-      path: "/",
-      children: [{ path: "/login", element: <LoginPage /> }],
-    },
-    {
       path: "*",
       element: <ErrorPage />,
     },
@@ -77,12 +73,13 @@ function Routers() {
       element: <CommonLayout />,
       children: [
         { index: true, element: <Home /> },
-        { path: "/cart", element: <Cart /> },
-        { path: "/product/:id", element: <Shop /> },
-        { path: "/shop/:id", element: <Product /> },
-        { path: "/shop-detail/:id", element: <ShopProductList /> },
-        { path: "/personal-information", element: <PersonalInformation /> },
-        { path: "/verify-payment/*", element: <VerifyPayment /> },
+        { path: "login", element: <LoginPage /> },
+        { path: "cart", element: <Cart /> },
+        { path: "product/:id", element: <Shop /> },
+        { path: "shop/:id", element: <Product /> },
+        { path: "shop-detail/:id", element: <ShopProductList /> },
+        { path: "personal-information", element: <PersonalInformation /> },
+        { path: "verify-payment/*", element: <VerifyPayment /> },
       ],
     },
     {
