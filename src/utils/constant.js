@@ -61,9 +61,10 @@ const orderLabels = {
   0: "Chờ xác nhận",
   1: "Đang chuẩn bị",
   2: "Đang giao hàng",
-  3: "Đã giao hàng",
+  3: "Thanh toán thành công",
   4: "Thất bại",
   5: "Trả hàng",
+  6: "Đã giao hàng",
 };
 export {
   clothTypeLabels,
