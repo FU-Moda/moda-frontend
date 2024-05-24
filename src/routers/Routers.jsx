@@ -72,8 +72,6 @@ function Routers() {
       path: "*",
       element: <ErrorPage />,
     },
-    { path: "/verify-payment/*", element: <VerifyPayment /> },
-
     {
       path: "/",
       element: <CommonLayout />,
@@ -84,6 +82,7 @@ function Routers() {
         { path: "/shop/:id", element: <Product /> },
         { path: "/shop-detail/:id", element: <ShopProductList /> },
         { path: "/personal-information", element: <PersonalInformation /> },
+        { path: "/verify-payment/*", element: <VerifyPayment /> },
       ],
     },
     {
