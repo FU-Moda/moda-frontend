@@ -96,14 +96,14 @@ const LoginPage = () => {
         );
         if (fetchAccount.isSuccess) {
           const userAccount = fetchAccount.result?.account;
-          console.log(userAccount);
           const shopData = await getShopByAccountId(userAccount.id);
           if (shopData.isSuccess) {
             dispatch(login(userAccount));
-            dispatch(setShop(shopData.result.items[0]));
+            dispatch(setShop(shopData.result?.items[0]));
             toast.success("Đăng nhập thành công");
             navigate("/");
           }
+          navigate("/");
         }
       }
     }

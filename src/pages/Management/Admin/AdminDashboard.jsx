@@ -7,13 +7,15 @@ import {
 } from "../../../api/dashboardApi";
 import { formatPrice } from "../../../utils/util";
 import { clothTypeLabels, genderLabels } from "../../../utils/constant";
-
+import LoadingComponent from "../../../components/LoadingComponent/LoadingComponent";
 export const AdminDashboard = () => {
   const [dataRevenue, setDataRevenue] = useState({});
   const [dataUser, setDataUser] = useState({});
   const [dataProduct, setDataProduct] = useState([]);
   const [selectedChoice, setSelectedChoice] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const fetchData = async () => {
+    setIsLoading(true);
     const [responseRevenue, responseUser, responseProduct] = await Promise.all([
       getRevenueReport(selectedChoice),
       getUserReport(selectedChoice),
@@ -25,6 +27,7 @@ export const AdminDashboard = () => {
       setDataProduct(responseProduct.result?.productReports);
       console.log(responseUser);
     }
+    setIsLoading(false);
   };
   useEffect(() => {
     fetchData();
@@ -65,6 +68,7 @@ export const AdminDashboard = () => {
   };
   return (
     <>
+      <LoadingComponent isLoading={isLoading} />
       <div className="container mx-auto py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-white shadow-md rounded-lg p-4">
