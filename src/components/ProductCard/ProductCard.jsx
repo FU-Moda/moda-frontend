@@ -50,7 +50,7 @@ const ProductCard = ({ title, productItem }) => {
             ></i>
           ))}
         </div>
-        <div className="flex flex-col  md:flex-row justify-between items-center my-2">
+        <div className="flex flex-col flex-wrap  md:flex-row justify-between items-center my-2">
           <h4 className="font-bold text-red-600">
             {" "}
             {formatPrice(productItem.productStock[0]?.price)}
