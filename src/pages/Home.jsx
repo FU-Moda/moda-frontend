@@ -13,7 +13,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {
-    setIsLoading(true);
+    //setIsLoading(true);
     const data = await getAllProduct(1, 20);
     if (data.isSuccess) {
       if (data.result != null) {
@@ -21,9 +21,9 @@ const Home = () => {
       } else {
         setProducts([]);
       }
-      setIsLoading(false);
+      // setIsLoading(false);
     }
-    setIsLoading(false);
+    // setIsLoading(false);
   };
   useEffect(() => {
     fetchData();
