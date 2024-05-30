@@ -7,7 +7,7 @@ const storedCartList =
 
 const initialState = {
   cartList: storedCartList,
-  selectedCoupon: "",
+  selectedCoupon: {},
 };
 
 export const cartSlice = createSlice({
@@ -94,8 +94,8 @@ export const cartSlice = createSlice({
       state.cartList = [];
     },
     applyCoupon: (state, action) => {
-      if (state.selectedCoupon === action.payload) {
-        state.selectedCoupon = "";
+      if (state.selectedCoupon.couponId === action.payload.couponId) {
+        state.selectedCoupon = {};
       } else {
         state.selectedCoupon = action.payload;
       }

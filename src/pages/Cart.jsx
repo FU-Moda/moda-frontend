@@ -19,7 +19,7 @@ const Cart = () => {
   const { cartList } = useSelector((state) => state.cart || []);
   const { user } = useSelector((state) => state.user || {});
   const selectedCoupon = useSelector(
-    (state) => state.cart.selectedCoupon || ""
+    (state) => state.cart.selectedCoupon || {}
   );
   const [selectedMethod, setSelectedMethod] = useState("");
   const [loading, setLoading] = useState(false);
@@ -140,7 +140,10 @@ const Cart = () => {
               <p>Quét QR để thanh toán:</p>
               <img src={qrPayment} alt="QR Code" className="w-full h-full" />
               <h3 className="text-center text-red-700 font-bold">
-                Số tiền cần phải thanh toán {formatPrice(totalPrice)}
+                Số tiền cần phải thanh toán{" "}
+                {formatPrice(
+                  (totalPrice * (100 - selectedCoupon.percent)) / 100
+                )}
               </h3>
               <h3 className="text-center text-red-700 font-bold">
                 Nội dung chuyển khoản: Tên tài khoản + Số điện thoại
