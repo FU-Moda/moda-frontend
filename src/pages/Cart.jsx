@@ -13,6 +13,7 @@ import CartSummary from "../components/Cart/CartSummary";
 import UserInfo from "../components/Cart/UserInfo";
 import qrPayment from "../Images/qr-payment.jpg";
 import { Modal, Button } from "antd";
+import { formatPrice } from "../utils/util";
 
 const Cart = () => {
   const { cartList } = useSelector((state) => state.cart || []);
@@ -136,8 +137,18 @@ const Cart = () => {
               onOk={handleOk}
               onCancel={handleCancel}
             >
-              <p>Xác nhận bạn đã thanh toán:</p>
+              <p>Quét QR để thanh toán:</p>
               <img src={qrPayment} alt="QR Code" className="w-full h-full" />
+              <h3 className="text-center text-red-700 font-bold">
+                Số tiền cần phải thanh toán {formatPrice(totalPrice)}
+              </h3>
+              <h3 className="text-center text-red-700 font-bold">
+                Nội dung chuyển khoản: Tên tài khoản + Số điện thoại
+              </h3>
+              <p className="text-base-400 text-center border-t mt-4">
+                Để xác nhận đơn hàng nhanh nhất bạn vui lòng gọi vào hotline:
+                +84 366 967 957
+              </p>
             </Modal>
           </div>
         </>
