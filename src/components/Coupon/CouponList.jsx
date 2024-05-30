@@ -8,6 +8,7 @@ const CouponList = ({ items }) => {
     (state) => state.cart.selectedCoupon || ""
   );
   console.log(selectedCoupon);
+  console.log(items);
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {items &&
@@ -16,9 +17,9 @@ const CouponList = ({ items }) => {
           <div
             key={coupon.id}
             className="bg-white rounded-lg overflow-hidden cursor-pointer relative  shadow-lg my-2"
-            onClick={() => dispatch(applyCoupon(coupon.code))}
+            onClick={() => dispatch(applyCoupon(coupon.id))}
           >
-            {selectedCoupon === coupon.code && (
+            {selectedCoupon === coupon.id && (
               <div className="absolute top-0 right-0  bg-green-600 text-white px-2 py-1 rounded-bl-lg shadow-lg">
                 Áp dụng
               </div>

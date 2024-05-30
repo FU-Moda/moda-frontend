@@ -1,3 +1,10 @@
+import { formatPrice } from "../../utils/util";
+import {
+  clothingSizeLabels,
+  genderLabels,
+  orderLabels,
+  shoeSizeLabels,
+} from "../../utils/constant";
 const CartList = ({ cartList, dispatch }) => {
   return (
     <div className="md:col-span-3">

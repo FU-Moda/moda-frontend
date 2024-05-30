@@ -64,10 +64,10 @@ const PersonalInformation = () => {
       </tr>
     ));
   };
-  console.log(isUpdateModalOpen);
+  console.log("shop", shop);
   return (
     <div className="container mx-auto py-8">
-      <div className="grid grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="col-span-1 bg-white shadow-md rounded-box p-6">
           <div className="flex justify-between">
             <h2 className="text-xl font-bold mb-4 text-primary">
@@ -105,26 +105,28 @@ const PersonalInformation = () => {
               {orders.length === 0 ? (
                 <p>Bạn chưa có đơn hàng nào.</p>
               ) : (
-                <table className="table w-full">
-                  <thead>
-                    <tr>
-                      <th>Mã đơn hàng</th>
-                      <th>Địa chỉ</th>
-                      <th>Trạng thái</th>
-                      <th>Tổng tiền</th>
-                      <th>Phí giao hàng</th>
-                      <th>Thời gian đặt</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {orders &&
-                      orders.length > 0 &&
-                      orders.map((order) => renderOrderItems(order))}
-                  </tbody>
-                </table>
+                <div className="overflow-x-auto">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>Mã đơn hàng</th>
+                        <th>Địa chỉ</th>
+                        <th>Trạng thái</th>
+                        <th>Tổng tiền</th>
+                        <th>Phí giao hàng</th>
+                        <th>Thời gian đặt</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {orders &&
+                        orders.length > 0 &&
+                        orders.map((order) => renderOrderItems(order))}
+                    </tbody>
+                  </table>
+                </div>
               )}
               <div>
-                {shop && (
+                {shop.id && (
                   <PricingOptions
                     isModalVisible={isPricingOpen}
                     setIsModalVisible={() => setIsPricingOpen(!isPricingOpen)}
