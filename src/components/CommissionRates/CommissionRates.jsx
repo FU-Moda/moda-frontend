@@ -3,7 +3,7 @@ import { formatDate } from "../../utils/util";
 import SettingModal from "../../pages/Management/Admin/Setting/SettingModal";
 import moment from "moment";
 
-const CommissionRates = ({ data }) => {
+const CommissionRates = ({ data, fetchData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -14,6 +14,7 @@ const CommissionRates = ({ data }) => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    fetchData();
   };
   if (data.length < 0) {
     return <div className="text-center">Không có dữ liệu</div>;

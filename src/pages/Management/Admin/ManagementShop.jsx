@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { getAllShop } from "../../../api/shopApi";
 import { useNavigate } from "react-router-dom";
 import LoadingComponent from "../../../components/LoadingComponent/LoadingComponent";
+import { useSelector } from "react-redux";
 export const ManagementShop = () => {
   const [listShop, setListShop] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const roleName = useSelector((state) => state.user?.role || "");
   const navigate = useNavigate();
   const fetchData = async () => {
     setIsLoading(true);
@@ -39,7 +41,13 @@ export const ManagementShop = () => {
               listShop.map((item) => (
                 <tr
                   key={item.id}
-                  onClick={() => navigate(`/admin/shop/${item.id}`)}
+                  onClick={() =>
+                    navigate(
+                      roleName === "isAdmin"
+                        ? `/admin/shop/${item.id}`
+                        : `/staff/shop/${item.id}`
+                    )
+                  }
                   className="cursor-pointer"
                 >
                   <td>{item.name}</td>

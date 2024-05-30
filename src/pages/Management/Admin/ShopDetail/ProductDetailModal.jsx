@@ -69,32 +69,32 @@ export const ProductDetailModal = ({ product, ratings, onClose }) => {
             </div>
           </div>
           <p></p>
-          <table class="w-full mb-4 bg-white shadow-md rounded-lg overflow-hidden">
-            <thead class="bg-primary text-white">
-              <tr>
-                <th class="px-4 py-2">STT</th>
-                <th class="px-4 py-2">Kích cỡ</th>
-                <th class="px-4 py-2">Số lượng</th>
-                <th class="px-4 py-2">Giá</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200">
-              {product.productStock.map((stock, index) => (
-                <tr key={stock.id}>
-                  <td class="text-center px-4 py-2">{index + 1}</td>
-                  <td class="text-center px-4 py-2">
-                    {stock.shoeSize
-                      ? shoeSizeLabels[stock.shoeSize]
-                      : clothingSizeLabels[stock.clothingSize]}
-                  </td>
-                  <td class="text-center px-4 py-2">{stock.quantity}</td>
-                  <td class="text-center px-4 py-2">
-                    {stock.price.toLocaleString()} đ
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="table w-full">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Kích cỡ</th>
+                  <th>Số lượng</th>
+                  <th>Giá</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {product.productStock.map((stock, index) => (
+                  <tr key={stock.id}>
+                    <th>{index + 1}</th>
+                    <td>
+                      {stock.shoeSize
+                        ? shoeSizeLabels[stock.shoeSize]
+                        : clothingSizeLabels[stock.clothingSize]}
+                    </td>
+                    <td>{stock.quantity}</td>
+                    <td>{stock.price.toLocaleString()} đ</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
           <div>
             <p className="font-semibold mx-8  text-xl mb-4 text-primary">
@@ -108,7 +108,10 @@ export const ProductDetailModal = ({ product, ratings, onClose }) => {
             </div>
           </div>
           <div className="modal-action">
-            <button className="btn btn-primary" onClick={onClose}>
+            <button
+              className="px-4 py-2 rounded-md shadow-md bg-primary text-white"
+              onClick={onClose}
+            >
               Đóng
             </button>
           </div>

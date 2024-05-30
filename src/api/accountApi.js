@@ -41,7 +41,7 @@ export const createAccount = async (
 export const sendOTP = async (email) => {
   try {
     const res = await axios.post(
-      `${baseUrl}/account/send-email-for-active-account/${email}`
+      `${baseUrl}/account/send-email-for-activeCode/${email}`
     );
     return res.data;
   } catch (err) {

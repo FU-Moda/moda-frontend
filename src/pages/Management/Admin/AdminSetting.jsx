@@ -26,7 +26,7 @@ const AdminSetting = () => {
       <h1 className="text-center text-primary text-2xl font-bold my-2">
         Cấu hình hệ thống
       </h1>
-      <CommissionRates data={data} />
+      <CommissionRates data={data} fetchData={fetchData} />
       {/* The SettingModal component */}
     </div>
   );

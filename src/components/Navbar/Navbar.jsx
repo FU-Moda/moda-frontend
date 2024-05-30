@@ -128,18 +128,18 @@ const NavBar = () => {
 
           <Link
             to="/cart"
-            className="hidden md:block no-underline text-primary"
+            className="hidden md:block  font-semibold no-underline text-primary  hover:text-gray-500"
           >
-            <i className="fa-solid fa-cart-shopping"></i>
+            Giỏ hàng
           </Link>
           {user ? (
             renderDropDown()
           ) : (
             <Link
               to="/login"
-              className="hidden md:block no-underline text-primary"
+              className="hidden md:block no-underline  font-semibold text-primary  hover:text-gray-500"
             >
-              <i className="fa-solid fa-user"></i>
+              Đăng nhập
             </Link>
           )}
         </div>

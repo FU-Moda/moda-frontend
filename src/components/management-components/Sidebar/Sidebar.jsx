@@ -5,10 +5,8 @@ import { NavLink, useLocation } from "react-router-dom";
 import { decode } from "../../../utils/jwtUtil";
 
 const SideBar = () => {
-  const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.sidebar?.isOpen);
-  const { user } = useSelector((state) => state.user || {});
-  const [roleName, setRoleName] = useState(null);
+  const roleName = useSelector((state) => state.user?.role || "");
 
   const location = useLocation();
 
@@ -61,23 +59,21 @@ const SideBar = () => {
       },
       {
         name: "Đối tác",
-        icon: <i className="fa-solid fa-shirt"></i>,
+        icon: <i className="fa-solid fa-handshake-simple"></i>,
         path: "shop",
       },
       {
-        name: "Cấu hình hệ thống",
-        icon: <i className="fa-solid fa-money-bill"></i>,
-        path: "pricing",
+        name: "Kiểm duyệt sản phẩm",
+        icon: <i className="fa-solid fa-shirt"></i>,
+        path: "product",
+      },
+      {
+        name: "Gói dịch vụ",
+        icon: <i className="fa-solid fa-box-open"></i>,
+        path: "package",
       },
     ],
   };
-
-  useEffect(() => {
-    var token = localStorage.getItem("accessToken");
-    if (token) {
-      setRoleName(decode(token).role);
-    }
-  }, [user, roleName]);
 
   const renderMenu = (items) => {
     return items.map((item, index) => (
@@ -113,10 +109,9 @@ const SideBar = () => {
           {roleName && renderMenu(menuItems[roleName])}
         </ul>
       </div> */}
-      <div className="h-full drawer lg:drawer-open">
+      <div className="h-full border-r border-gray-100 drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-
-        <div className="drawer-side z-10 shadow-lg  rounded-4xl">
+        <div className="drawer-side z-10  rounded-4xl">
           <label
             htmlFor="my-drawer-2"
             aria-label="close sidebar"

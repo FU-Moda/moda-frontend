@@ -25,7 +25,7 @@ const SettingModal = ({ visible, onCancel, initialValues }) => {
   }, [form, initialValues]);
   const handleOk = async () => {
     const values = form.getFieldsValue();
-    values.activeDate = values.activeDate.toISOString();
+    values.activeDate = new Date(values.activeDate).toISOString();
     console.log("values", values);
     const response = await updateConfiguration(values);
     if (response.isSuccess) {

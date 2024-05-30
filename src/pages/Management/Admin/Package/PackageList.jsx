@@ -19,6 +19,10 @@ const PackageList = () => {
   const [selectedPackage, setSelectedPackage] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const fetchPackageList = async () => {
+    if (isModalVisible) {
+      return;
+    }
+
     setIsLoading(true);
     const response = await getAllOptionPackage(1, 10);
     if (response.isSuccess) {

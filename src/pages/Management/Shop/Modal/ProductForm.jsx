@@ -331,13 +331,7 @@ const ProductForm = () => {
               {errors.ProductStocks && (
                 <span className="text-error">{errors.ProductStocks}</span>
               )}
-              <div className="form-control w-full max-w-xs">
-                <label className="label">
-                  <span className="label-text">
-                    Chọn kho vận chuyển gần nhất
-                  </span>
-                </label>
-              </div>
+
               <button
                 type="button"
                 onClick={() => removeProductStock(index)}

@@ -35,3 +35,11 @@ export const getAllOptionPackage = async (pageNumber, pageSize) => {
     return response.data;
   } catch (error) {}
 };
+export const assignPackageForShop = async (shopId, packageId) => {
+  try {
+    const response = await axios.post(
+      `${baseUrl}/shop/assign-package-for-shop?shopId=${shopId}&optionPackageId=${packageId}`
+    );
+    return response.data;
+  } catch (error) {}
+};

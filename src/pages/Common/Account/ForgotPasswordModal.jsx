@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Modal, Input, Button, Form } from "antd";
 import { sendResetPassOTP } from "../../../api/accountApi";
 import { toast } from "react-toastify";
@@ -9,6 +9,16 @@ const ForgotPasswordModal = ({ visible, onCancel, onSubmit }) => {
   const [recoveryCode, setRecoveryCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [countdown, setCountdown] = useState(null);
+  const countdownInterval = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (countdownInterval.current) {
+        clearInterval(countdownInterval.current);
+      }
+    };
+  }, []);
   const handleEmailSubmit = async () => {
     setIsLoading(true);
     const result = await sendResetPassOTP(email);
@@ -16,6 +26,16 @@ const ForgotPasswordModal = ({ visible, onCancel, onSubmit }) => {
       toast.success("OTP has just been sent to your email");
       setIsLoading(false);
       setStep(2);
+      setCountdown(30); // start countdown from 30 seconds
+      countdownInterval.current = setInterval(() => {
+        setCountdown((prevCountdown) => {
+          if (prevCountdown <= 1) {
+            clearInterval(countdownInterval.current);
+            return null;
+          }
+          return prevCountdown - 1;
+        });
+      }, 1000);
     } else {
       for (var i = 0; i < result.messages.length; i++) {
         toast.error(result.messages[i]);
@@ -108,7 +128,10 @@ const ForgotPasswordModal = ({ visible, onCancel, onSubmit }) => {
             style={{ position: "absolute", bottom: "2.2rem", right: "1rem" }}
             onClick={handleEmailSubmit}
           >
-            <Button type="link">Resend OTP Code</Button>
+            <Button type="link">
+              {" "}
+              Resend OTP Code {countdown !== null && `(${countdown}s)`}
+            </Button>
           </span>
         </Form>
       )}
