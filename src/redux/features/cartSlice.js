@@ -7,6 +7,7 @@ const storedCartList =
 
 const initialState = {
   cartList: storedCartList,
+  selectedCoupon: "",
 };
 
 export const cartSlice = createSlice({
@@ -92,6 +93,13 @@ export const cartSlice = createSlice({
     deleteCart: (state) => {
       state.cartList = [];
     },
+    applyCoupon: (state, action) => {
+      if (state.selectedCoupon === action.payload) {
+        state.selectedCoupon = "";
+      } else {
+        state.selectedCoupon = action.payload;
+      }
+    },
   },
 });
 
@@ -104,7 +112,12 @@ export const cartMiddleware = (store) => (next) => (action) => {
   return result;
 };
 
-export const { addToCart, decreaseQty, deleteProduct, deleteCart } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  decreaseQty,
+  deleteProduct,
+  deleteCart,
+  applyCoupon,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

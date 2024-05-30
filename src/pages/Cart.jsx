@@ -13,20 +13,29 @@ import { deleteCart } from "../redux/features/cartSlice";
 import PaymentMethod from "../components/PaymentMethod/PaymentMethod";
 import { useNavigate } from "react-router-dom";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
+import CouponList from "../components/Coupon/CouponList";
+import { getAllCoupon } from "../api/couponApi";
 const Cart = () => {
   const { cartList } = useSelector((state) => state.cart || []);
   const { user } = useSelector((state) => state.user || {});
   const [selectedMethod, setSelectedMethod] = useState("");
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-
+  const [couponList, setCouponList] = useState([]);
   const totalPrice = cartList.reduce(
     (price, item) => price + item.quantity * item.productStock?.price,
     0
   );
   const navigate = useNavigate();
+  const fetchData = async () => {
+    const data = await getAllCoupon(1, 10);
+    if (data.isSuccess) {
+      setCouponList(data.result.items);
+    }
+  };
   useEffect(() => {
     window.scrollTo(0, 0);
+    fetchData();
   }, []);
   const checkOut = async () => {
     setLoading(true);
@@ -82,7 +91,7 @@ const Cart = () => {
           <div className="grid grid-cols-1 md:grid-cols-2gap-8">
             <div className="card bg-base-100 shadow-xl mb-4">
               <div className="card-body">
-                <h2 className="card-title">Thông tin khách hàng</h2>
+                <h2 className="card-title font-bold">Thông tin khách hàng</h2>
                 <div className="flex flex-col">
                   <div className="flex items-center mb-2">
                     <span className="font-semibold mr-2">Tên khách hàng:</span>
@@ -216,7 +225,7 @@ const Cart = () => {
               </div>
             </div>
           </div>
-
+          <CouponList items={couponList} />
           <div className="flex justify-end">
             <button
               className="bg-primary text-white text-end px-4 py-2 mt-4 rounded-md shadow-md mx-4"

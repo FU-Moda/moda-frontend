@@ -26,7 +26,7 @@ const PaymentMethod = ({ log }) => {
           <span className="label-text">Thanh toán khi nhận hàng (COD)</span>
         </label>
       </div>
-      <div className="form-control">
+      {/* <div className="form-control">
         <label className="label cursor-pointer justify-start gap-4">
           <input
             type="radio"
@@ -37,7 +37,7 @@ const PaymentMethod = ({ log }) => {
           />
           <span className="label-text">VNPay</span>
         </label>
-      </div>
+      </div> */}
     </div>
   );
 };
