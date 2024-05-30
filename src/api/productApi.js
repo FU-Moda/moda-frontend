@@ -51,7 +51,7 @@ const getRatingByProductId = async (id, pageNumber, pageSize) => {
 
 const getShopById = async (id) => {
   try {
-    const data = await axios.get(`${baseUrl}/get-shop-by-id/${id}`);
+    const data = await axios.get(`${baseUrl}/shop/get-shop-by-id/${id}`);
     return data.data;
   } catch (error) {}
 };
