@@ -32,3 +32,33 @@ export const createShopAccount = async (data) => {
     console.log(error);
   }
 };
+export const getShopAffilateByShopId = async (shopId, pageNumber, pageSize) => {
+  try {
+    const data = await axios.get(
+      `${baseUrl}/shop/get-shop-affiliate-by-shop-id/${shopId}/${pageNumber}/${pageSize}`
+    );
+    return data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getTotalAffilate = async (shopId, startDate, endDate) => {
+  try {
+    const data = await axios.get(
+      `${baseUrl}/shop/get-total-affiliate?shopId=${shopId}&startDate=${startDate}&endDate=${endDate}`
+    );
+    return data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getShopPackageByStatus = async (pageNumber, pageSize, status) => {
+  try {
+    const data = await axios.get(
+      `${baseUrl}/shop/get-shop-package-by-status/${pageNumber}/${pageSize}?shopPackageStatus=${status}`
+    );
+    return data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

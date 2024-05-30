@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import {
   clothTypeLabels,
@@ -9,13 +8,11 @@ import {
 } from "../../../../utils/constant";
 import { addNewProduct } from "../../../../api/productApi";
 import { toast } from "react-toastify";
-import { getAllWarehouse } from "../../../../api/warehouseApi";
 import { useNavigate } from "react-router-dom";
 
 const ProductForm = () => {
   const { shop } = useSelector((state) => state.shop || {});
   const [errors, setErrors] = useState({});
-  const [wareHouse, setWarehouse] = useState([]);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     Name: "",
@@ -29,7 +26,6 @@ const ProductForm = () => {
         shoeSize: null,
         price: 0,
         quantity: 0,
-        warehouseId: null,
       },
     ],
   });
@@ -106,10 +102,6 @@ const ProductForm = () => {
       errors.ProductStocks = "Số lượng sản phẩm phải lớn hơn 0";
       isValid = false;
     }
-    if (formData.ProductStocks.some((stock) => stock.warehouseId == null)) {
-      errors.ProductStocks = "Kho phải được chọn";
-      isValid = false;
-    }
     if (files.length === 0) {
       errors.Files = "Ảnh phải được chọn";
       isValid = false;
@@ -132,7 +124,6 @@ const ProductForm = () => {
           shoeSize: 0,
           price: 0,
           quantity: 0,
-          warehouseId: null,
         },
       ],
     });
@@ -151,10 +142,6 @@ const ProductForm = () => {
             );
             data.append(`ProductStocks[${index}].price`, stock.price);
             data.append(`ProductStocks[${index}].quantity`, stock.quantity);
-            data.append(
-              `ProductStocks[${index}].warehouseId`,
-              stock.warehouseId
-            );
             data.append(
               `ProductStocks[${index}].shoeSize`,
               stock.shoeSize ? stock.shoeSize : ""
@@ -189,17 +176,6 @@ const ProductForm = () => {
       ProductStocks: formData.ProductStocks.filter((_, i) => i !== index),
     });
   };
-
-  const fetchData = async () => {
-    const data = await getAllWarehouse(1, 100);
-    if (data.isSuccess) {
-      setWarehouse(data.result.items);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   return (
     <div className="max-w-lg mx-auto p-8 rounded-lg shadow-lg">
@@ -355,26 +331,7 @@ const ProductForm = () => {
               {errors.ProductStocks && (
                 <span className="text-error">{errors.ProductStocks}</span>
               )}
-              <div className="form-control w-full max-w-xs">
-                <label className="label">
-                  <span className="label-text">
-                    Chọn kho vận chuyển gần nhất
-                  </span>
-                </label>
-                <select
-                  name={`ProductStocks[${index}].warehouseId`}
-                  value={stock.warehouseId}
-                  onChange={handleChange}
-                  className="select select-bordered"
-                >
-                  {wareHouse &&
-                    wareHouse.map((item) => (
-                      <option key={item.id} value={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
+
               <button
                 type="button"
                 onClick={() => removeProductStock(index)}

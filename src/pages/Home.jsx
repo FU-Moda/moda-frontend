@@ -1,9 +1,5 @@
-import { Fragment, useEffect, useState } from "react";
-import Wrapper from "../components/wrapper/Wrapper";
-import Section from "../components/Section";
-import { products, discoutProducts } from "../utils/products";
+import { useEffect, useState } from "react";
 import SliderHome from "../components/Slider";
-import useWindowScrollToTop from "../hooks/useWindowScrollToTop";
 import ShopList from "../components/ShopList";
 import { getAllProduct } from "../api/productApi";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";

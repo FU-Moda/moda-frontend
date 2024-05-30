@@ -2,18 +2,14 @@ import { Col, Container, Row } from "react-bootstrap";
 import FilterSelect from "../components/FilterSelect";
 import SearchBar from "../components/SeachBar/SearchBar";
 import { Fragment, useEffect, useState } from "react";
-import { products } from "../utils/products";
 import ShopList from "../components/ShopList";
 import Banner from "../components/Banner/Banner";
 import useWindowScrollToTop from "../hooks/useWindowScrollToTop";
-import { getAllProduct, getAllProductByFilter } from "../api/productApi";
+import { getAllProductByFilter } from "../api/productApi";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 import { useParams } from "react-router-dom";
 
 const Shop = () => {
-  // const [filterList, setFilterList] = useState(
-  //   products.filter((item) => item.category === "sofa")
-  // );
   const { id } = useParams();
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);

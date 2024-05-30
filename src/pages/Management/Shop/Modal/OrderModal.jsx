@@ -3,6 +3,7 @@ import {
   orderLabels,
   shoeSizeLabels,
 } from "../../../../utils/constant";
+import { formatPrice } from "../../../../utils/util";
 
 const OrderModal = ({ item, onClose }) => {
   console.log(item);
@@ -50,10 +51,12 @@ const OrderModal = ({ item, onClose }) => {
               <strong>Trạng thái:</strong> {orderLabels[item.order.status]}
             </p>
             <p className="mb-1">
-              <strong>Phí giao hàng:</strong> {item.order.deliveryCost} VND
+              <strong>Phí giao hàng:</strong>{" "}
+              {formatPrice(item.order.deliveryCost)} VND
             </p>
             <p className="mb-1">
-              <strong>Tổng đơn hàng:</strong> {item.order.total} VND
+              <strong>Tổng đơn hàng:</strong> {formatPrice(item.order.total)}{" "}
+              VND
             </p>
           </div>
 
@@ -73,16 +76,14 @@ const OrderModal = ({ item, onClose }) => {
                   <tr key={detail.id} className="hover:bg-gray-100">
                     <td>{detail.productStock.product.name}</td>
                     <td>{detail.quantity}</td>
-                    <td>{detail.productStock.price.toLocaleString()}</td>
+                    <td>{formatPrice(detail.productStock.price)}</td>
                     <td>
                       {detail.productStock.shoeSize
                         ? shoeSizeLabels[detail.productStock.shoeSize]
                         : clothingSizeLabels[detail.productStock.clothingSize]}
                     </td>
                     <td>
-                      {(
-                        detail.quantity * detail.productStock.price
-                      ).toLocaleString()}
+                      {formatPrice(detail.quantity * detail.productStock.price)}
                     </td>
                   </tr>
                 ))}

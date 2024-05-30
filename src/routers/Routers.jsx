@@ -22,6 +22,10 @@ import ShopDashboard from "../pages/Management/Shop/ShopDashboard";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import VerifyPayment from "../pages/Common/VerifyPayment";
 import SignUpShop from "../pages/Management/Shop/SignUpShop";
+import AdminSetting from "../pages/Management/Admin/AdminSetting";
+import CreatePackage from "../pages/Management/Admin/Package/CreatePackage";
+import PackageList from "../pages/Management/Admin/Package/PackageList";
+import PackageManagement from "../pages/Management/Staff/PackageManagement";
 const ProtectedRouteAuth = ({ children }) => {
   const role = decode(localStorage.getItem("accessToken"));
   if (role !== "isStaff" && role != "isAdmin") {
@@ -119,7 +123,70 @@ function Routers() {
         },
         {
           path: "settings",
-          element: <ProtectedRouteAdmin></ProtectedRouteAdmin>,
+          element: (
+            <ProtectedRouteAdmin>
+              <AdminSetting />
+            </ProtectedRouteAdmin>
+          ),
+        },
+        {
+          path: "package",
+          element: (
+            <ProtectedRouteAdmin>
+              <PackageList />
+            </ProtectedRouteAdmin>
+          ),
+        },
+        {
+          path: "package/create",
+          element: (
+            <ProtectedRouteAdmin>
+              <CreatePackage />
+            </ProtectedRouteAdmin>
+          ),
+        },
+      ],
+    },
+    {
+      path: "staff",
+      element: (
+        <ProtectedRouteStaff>
+          <ManagementLayOut />
+        </ProtectedRouteStaff>
+      ),
+      children: [
+        { index: true, element: <Navigate to="dashboard" replace /> },
+        {
+          path: "dashboard",
+          element: (
+            <ProtectedRouteStaff>
+              <AdminDashboard />
+            </ProtectedRouteStaff>
+          ),
+        },
+        {
+          path: "shop",
+          element: (
+            <ProtectedRouteStaff>
+              <ManagementShop />
+            </ProtectedRouteStaff>
+          ),
+        },
+        {
+          path: "shop/:id",
+          element: (
+            <ProtectedRouteStaff>
+              <ShopDetail />
+            </ProtectedRouteStaff>
+          ),
+        },
+        {
+          path: "package",
+          element: (
+            <ProtectedRouteStaff>
+              <PackageManagement />
+            </ProtectedRouteStaff>
+          ),
         },
       ],
     },

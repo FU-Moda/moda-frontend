@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addToCart,
-  decreaseQty,
-  deleteProduct,
-} from "../app/features/cart/cartSlice";
-import { formatPrice } from "../utils/util";
-import { clothingSizeLabels, shoeSizeLabels } from "../utils/constant";
 import { createOrderCOD, createOrderWithPayment } from "../api/orderApi";
 import { toast } from "react-toastify";
 import { deleteCart } from "../redux/features/cartSlice";
@@ -15,9 +8,18 @@ import { useNavigate } from "react-router-dom";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 import CouponList from "../components/Coupon/CouponList";
 import { getAllCoupon } from "../api/couponApi";
+import CartList from "../components/Cart/CartList";
+import CartSummary from "../components/Cart/CartSummary";
+import UserInfo from "../components/Cart/UserInfo";
+import qrPayment from "../Images/qr-payment.jpg";
+import { Modal, Button } from "antd";
+
 const Cart = () => {
   const { cartList } = useSelector((state) => state.cart || []);
   const { user } = useSelector((state) => state.user || {});
+  const selectedCoupon = useSelector(
+    (state) => state.cart.selectedCoupon || ""
+  );
   const [selectedMethod, setSelectedMethod] = useState("");
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -26,6 +28,20 @@ const Cart = () => {
     (price, item) => price + item.quantity * item.productStock?.price,
     0
   );
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = async () => {
+    setIsModalVisible(false);
+    await checkOut();
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
   const navigate = useNavigate();
   const fetchData = async () => {
     const data = await getAllCoupon(1, 10);
@@ -64,6 +80,7 @@ const Cart = () => {
         const response = await createOrderCOD({
           accountId: user.id,
           productStockDtos,
+          couponId: selectedCoupon,
         });
         if (response.isSuccess) {
           toast.success("Đặt hàng thành công");
@@ -88,151 +105,40 @@ const Cart = () => {
       <LoadingComponent isLoading={loading} />
       {user ? (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2gap-8">
+          <div className="grid grid-cols-1">
             <div className="card bg-base-100 shadow-xl mb-4">
               <div className="card-body">
-                <h2 className="card-title font-bold">Thông tin khách hàng</h2>
-                <div className="flex flex-col">
-                  <div className="flex items-center mb-2">
-                    <span className="font-semibold mr-2">Tên khách hàng:</span>
-                    <span>{`${user?.firstName} ${user.lastName}`}</span>
-                  </div>
-                  <div className="flex items-center mb-2">
-                    <span className="font-semibold mr-2">Email:</span>
-                    <span>{user?.email}</span>
-                  </div>
-                  <div className="flex items-center mb-2">
-                    <span className="font-semibold mr-2">Số điện thoại:</span>
-                    <span>{user?.phoneNumber}</span>
-                  </div>
-                  <div className="flex items-center mb-2">
-                    <span className="font-semibold mr-2">Giới tính:</span>
-                    <span>{user?.gender ? "Nam" : "Nữ"}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="font-semibold mr-2">Địa chỉ:</span>
-                    <span>{user?.address}</span>
-                  </div>
-                </div>
+                <h2 className="card-title">Thông tin khách hàng</h2>
+                <UserInfo user={user} />
               </div>
             </div>
-            <div className="md:col-span-3">
-              {cartList.length === 0 && (
-                <h1 className="text-2xl font-bold">
-                  Không tồn tại sản phẩm nào
-                </h1>
-              )}
-              {cartList.map((item) => {
-                const productQty = item.productStock?.price * item.quantity;
-                return (
-                  <div
-                    key={item.id}
-                    className="flex flex-col md:flex-row items-center mb-8 border p-4 rounded-md shadow-md"
-                  >
-                    <div className="w-40 h-40 mb-4 md:mb-0">
-                      <img
-                        loading="lazy"
-                        src={item.productItem?.staticFile[0]?.img}
-                        alt=""
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                    <div className="flex flex-col p-4 w-full  ">
-                      <div className="md:w-2/3 flex flex-col md:flex-row justify-between items-center">
-                        <div className="mb-4 md:mb-0">
-                          <h3 className="text-xl font-bold mb-2">
-                            {item.productItem?.product?.name}
-                          </h3>
-                          <div className="mb-2 flex">
-                            <strong>Tổng tiền</strong>
-                            <div className="mx-2">
-                              {" "}
-                              <span>
-                                {formatPrice(item.productStock?.price)}
-                              </span>
-                              <span className="mx-2">x {item.quantity}</span>{" "}
-                              <span>= {formatPrice(productQty)}</span>
-                            </div>
-                          </div>
-                          <div className="my-2 flex ">
-                            <strong>Phân loại</strong>
-                            <span className="mx-2">
-                              {item.productStock?.clothingSize !== null
-                                ? clothingSizeLabels[
-                                    item.productStock?.clothingSize
-                                  ]
-                                : shoeSizeLabels[item.productStock?.shoeSize]}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center">
-                        <button
-                          className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-l mr-2"
-                          onClick={() =>
-                            dispatch(
-                              addToCart({
-                                productItem: item.productItem,
-                                productStock: item.productStock,
-                                num: 1,
-                              })
-                            )
-                          }
-                        >
-                          <i className="fa-solid fa-plus"></i>
-                        </button>
-                        <button
-                          className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-r mr-2"
-                          onClick={() =>
-                            dispatch(
-                              decreaseQty({
-                                productItem: item?.productItem,
-                                productStock: item?.productStock,
-                                num: 1,
-                              })
-                            )
-                          }
-                        >
-                          <i className="fa-solid fa-minus"></i>
-                        </button>
-                        <button
-                          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                          onClick={() =>
-                            dispatch(
-                              deleteProduct({ productStock: item.productStock })
-                            )
-                          }
-                        >
-                          X
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <CartList cartList={cartList} dispatch={dispatch} />
 
             <div className=" rounded-box p-6">
               <PaymentMethod log={log} />
 
               <div className="divider"></div>
 
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold">Giỏ hàng</h2>
-                <h3 className="text-xl font-bold">
-                  Tổng tiền: {formatPrice(totalPrice)}
-                </h3>
-              </div>
+              <CartSummary totalPrice={totalPrice} />
             </div>
           </div>
           <CouponList items={couponList} />
           <div className="flex justify-end">
             <button
               className="bg-primary text-white text-end px-4 py-2 mt-4 rounded-md shadow-md mx-4"
-              onClick={checkOut}
+              onClick={showModal}
             >
               Đặt hàng
             </button>
+            <Modal
+              title="Xác nhận thanh toán"
+              visible={isModalVisible}
+              onOk={handleOk}
+              onCancel={handleCancel}
+            >
+              <p>Xác nhận bạn đã thanh toán:</p>
+              <img src={qrPayment} alt="QR Code" className="w-full h-full" />
+            </Modal>
           </div>
         </>
       ) : (

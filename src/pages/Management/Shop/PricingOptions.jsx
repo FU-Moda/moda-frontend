@@ -1,103 +1,132 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Modal, Button } from "antd";
+import {
+  assignPackageForShop,
+  getAllOptionPackage,
+} from "../../../api/packageApi";
+import { formatPrice } from "../../../utils/util";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
-const PricingOption = ({ title, description, features, price, isPopular }) => {
-  const cardClasses = `card shadow-xl ${
-    isPopular ? "bg-green-500 text-white" : "bg-white"
-  }`;
+const PricingOption = ({
+  title,
+  description,
+  price,
+  status,
+  isDashboardAvailable,
+  isBannerAvailable,
+  onSelectPackage,
+}) => {
+  const cardClasses = `card shadow-xl bg-white p-6 rounded-lg`;
+  const statusText = status === 1 ? "Đang hoạt động" : "Ngừng hoạt động";
+  const dashboardText = isDashboardAvailable
+    ? "Có thể sử dụng dashboard"
+    : "Không thể sử dụng dashboard";
+  const bannerText = isBannerAvailable
+    ? "Có thể sử dụng banner quảng cáo tại MODA"
+    : "Không thể sử dụng banner";
 
   return (
     <div className={cardClasses}>
-      <div className="card-body">
-        <h2 className="card-title">{title}</h2>
-        <p>{description}</p>
-        <div className="mt-4">
-          <span
-            className={`badge font-bold ${
-              isPopular ? "bg-white text-green-500" : "bg-green-500 text-white"
-            }`}
-          >
-            {`${price === 0 ? "Miễn phí" : `${price} VNĐ/tháng`}`}
+      <h2 className="text-2xl font-bold mb-4">{title}</h2>
+      <p className="text-gray-600 mb-4">{description}</p>
+
+      <div className="mt-4">
+        <div className="flex items-center mb-2">
+          <span className="text-green-500 font-bold mr-2">
+            {price === 0 ? "Miễn phí" : `${price}`}
           </span>
+          <span className="text-gray-500">{statusText}</span>
         </div>
-        <div className="mt-6">
-          <ul className="list-disc ml-6">
-            {features.map((feature, index) => (
-              <li key={index}>{feature}</li>
-            ))}
-          </ul>
+        <div className="flex items-start">
+          <span className="text-gray-500 font-semibold mr-2">Dashboard:</span>
+          <span className="text-gray-600">{dashboardText}</span>
         </div>
-        {isPopular && (
-          <div className="mt-4">
-            <span className="badge badge-accent bg-yellow-500 text-white">
-              Phổ biến nhất
-            </span>
-          </div>
-        )}
+        <div className="flex items-start mt-2">
+          <span className="text-gray-500 font-semibold mr-2">Banner:</span>
+          <span className="text-gray-600">{bannerText}</span>
+        </div>
       </div>
+      <button
+        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+        onClick={onSelectPackage}
+      >
+        Chọn gói này
+      </button>
     </div>
   );
 };
 
-const PricingOptions = () => {
-  const options = [
-    {
-      title: "Gói cơ bản (Miễn phí)",
-      description:
-        "Phù hợp với: Doanh nghiệp mới tham gia MODA, muốn thử nghiệm nền tảng và tiếp cận khách hàng mới.",
-      features: [
-        "Đăng sản phẩm không giới hạn.",
-        "Quản lý đơn hàng cơ bản.",
-        "Hỗ trợ khách hàng qua email.",
-        "Tham gia các chương trình khuyến mãi chung của MODA.",
-      ],
-      price: 0,
-      isPopular: false,
-    },
-    {
-      title: "Gói nâng cao",
-      description:
-        "Phù hợp với: Doanh nghiệp muốn tăng khả năng hiển thị sản phẩm và thu hút khách hàng.",
-      features: [
-        "Tất cả các tính năng của gói cơ bản.",
-        "Quảng cáo sản phẩm trên trang chủ MODA.",
-        "Tham gia các chương trình khuyến mãi độc quyền của MODA.",
-        "Hỗ trợ khách hàng qua điện thoại.",
-        "Báo cáo thống kê doanh thu.",
-      ],
-      price: 500000,
-      isPopular: true,
-    },
-    {
-      title: "Gói cao cấp",
-      description:
-        "Phù hợp với: Doanh nghiệp muốn tối ưu hóa hiệu quả bán hàng và xây dựng thương hiệu trên MODA.",
-      features: [
-        "Tất cả các tính năng của gói nâng cao.",
-        "Dịch vụ chụp ảnh sản phẩm chuyên nghiệp.",
-        "Dịch vụ quản lý kho hàng.",
-        "Dịch vụ vận chuyển và giao hàng.",
-        "Dịch vụ chăm sóc khách hàng VIP.",
-        "Báo cáo thống kê chi tiết về hành vi khách hàng.",
-      ],
-      price: 1000000,
-      isPopular: false,
-    },
-  ];
+const PricingOptions = ({ isModalVisible, setIsModalVisible }) => {
+  const [options, setOptions] = useState([]);
+  const shop = useSelector((state) => state.shop.shop || {});
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const fetchOptions = async () => {
+    const data = await getAllOptionPackage(1, 10);
+    if (data.isSuccess) {
+      setOptions(data.result.items);
+    }
+  };
+
+  useEffect(() => {
+    fetchOptions();
+  }, []);
+
+  const handleSelectPackage = async (optionPackageId) => {
+    try {
+      const data = await assignPackageForShop(shop?.id, optionPackageId);
+      if (data.isSuccess) {
+        toast.success(
+          "Gói đã được đăng kí thành công! Vui lòng đợi nhân viên xác nhận."
+        );
+      }
+    } catch (error) {
+      toast.error("Failed to assign package.");
+      console.error(error);
+    }
+  };
 
   return (
-    <div className="container">
-      <div className="flex justify-center gap-8 my-8">
-        {options.map((option, index) => (
-          <PricingOption
-            key={index}
-            title={option.title}
-            description={option.description}
-            features={option.features}
-            price={option.price}
-            isPopular={option.isPopular}
-          />
-        ))}
-      </div>
+    <div className="">
+      <Button type="primary" onClick={showModal}>
+        Gói dịch vụ MODA
+      </Button>
+      <Modal
+        title="Gói dich vụ tại MODA"
+        open={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        width={900}
+      >
+        <div className="flex justify-center gap-8 my-8">
+          {options.map((option, index) => (
+            <PricingOption
+              key={index}
+              title={option.optionPackage.packageName}
+              description={option.optionPackage.description}
+              price={formatPrice(option.optionPackageHistory[0].packagePrice)}
+              isBannerAvailable={option.optionPackage.isBannerAvailable}
+              isDashboardAvailable={option.optionPackage.isDashboardAvailable}
+              status={option.optionPackage.status}
+              onSelectPackage={() =>
+                handleSelectPackage(option.optionPackage?.optionPackageId)
+              }
+            />
+          ))}
+        </div>
+      </Modal>
     </div>
   );
 };

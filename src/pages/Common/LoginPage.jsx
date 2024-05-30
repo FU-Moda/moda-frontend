@@ -16,7 +16,7 @@ import {
 } from "../../api/accountApi";
 import { toast } from "react-toastify";
 import { decode } from "../../utils/jwtUtil";
-import { login } from "../../redux/features/authSlice";
+import { author, login } from "../../redux/features/authSlice";
 import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
 import { getShopByAccountId } from "../../api/shopApi";
 import { setShop } from "../../redux/features/shopSlice";
@@ -115,6 +115,7 @@ const LoginPage = () => {
           decode(localStorage.getItem("accessToken")).accountId,
           localStorage.getItem("accessToken")
         );
+        dispatch(author(decode(localStorage.getItem("accessToken")).role));
         if (fetchAccount.isSuccess) {
           const userAccount = fetchAccount.result?.account;
           const shopData = await getShopByAccountId(userAccount.id);
@@ -166,6 +167,9 @@ const LoginPage = () => {
                         decode(localStorage.getItem("accessToken")).accountId,
                         localStorage.getItem("accessToken")
                       );
+                      dispatch(
+                        author(decode(localStorage.getItem("accessToken")).role)
+                      );
                       if (fetchAccount.isSuccess) {
                         const userAccount = fetchAccount.result?.account;
                         console.log(userAccount);
@@ -183,7 +187,8 @@ const LoginPage = () => {
                       for (var i = 0; i < data.messages.length; i++) {
                         toast.error(data.messages[i]);
                         if (
-                          data.messages[i] == "Tài khoản chưa được xác thực"
+                          data.messages[i] ==
+                          "Tài khoản này chưa được xác thực !"
                         ) {
                           setEmail(values.email);
                           setIsModalVisible(true);

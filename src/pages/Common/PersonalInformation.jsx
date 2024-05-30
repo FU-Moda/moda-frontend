@@ -8,12 +8,16 @@ import { orderLabels } from "../../utils/constant";
 import { formatDateTime, formatPrice } from "../../utils/util";
 import { clothingSizeLabels, shoeSizeLabels } from "../../utils/constant";
 import PersonalModal from "./Account/PersonalModal";
+import PricingOptions from "../Management/Shop/PricingOptions";
 const PersonalInformation = () => {
   const { user } = useSelector((state) => state.user || {});
+  const shop = useSelector((state) => state.shop.shop || {});
   const [orders, setOrders] = useState([]);
   const [isOrderDetail, setIsOrderDetail] = useState(false);
   const [orderDetailId, setOrderDetailId] = useState(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isPricingOpen, setIsPricingOpen] = useState(false);
+
   const [data, setData] = useState({});
   const userMap = {
     name: `${user.firstName} ${user.lastName}`,
@@ -119,6 +123,14 @@ const PersonalInformation = () => {
                   </tbody>
                 </table>
               )}
+              <div>
+                {shop && (
+                  <PricingOptions
+                    isModalVisible={isPricingOpen}
+                    setIsModalVisible={() => setIsPricingOpen(!isPricingOpen)}
+                  />
+                )}
+              </div>
             </div>
           </>
         ) : (

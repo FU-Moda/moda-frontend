@@ -39,6 +39,17 @@ export default {
         xl: "1280px",
         "2xl": "1536px",
       },
+
+      animation: {
+        "text-animation": "text-animation 2s infinite",
+      },
+      keyframes: {
+        "text-animation": {
+          "0%": { color: "blue" },
+          "50%": { color: "red" },
+          "100%": { color: "blue" },
+        },
+      },
     },
   },
   daisyui: {
