@@ -2,7 +2,6 @@ import { Fragment, useEffect, useState } from "react";
 import Banner from "../components/Banner/Banner";
 import { Container } from "react-bootstrap";
 import ShopList from "../components/ShopList";
-import { products } from "../utils/products";
 import { NavLink, useParams } from "react-router-dom";
 import ProductDetails from "../components/ProductDetails/ProductDetails";
 import ProductReviews from "../components/ProductReviews/ProductReviews";

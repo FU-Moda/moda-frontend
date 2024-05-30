@@ -10,7 +10,7 @@ const ManagementLayOut = () => {
         <div className="flex flex-row flex-1">
           <SideBar />
 
-          <div class="container p-4 shadow-lg my-10 rounded-4xl">
+          <div className="container p-4 shadow-lg my-10 rounded-4xl">
             <Outlet />
           </div>
         </div>

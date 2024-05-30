@@ -41,6 +41,12 @@ const SideBar = () => {
         icon: <i className="fa-solid fa-handshake-simple"></i>,
         path: "shop",
       },
+
+      {
+        name: "Gói dịch vụ",
+        icon: <i className="fa-solid fa-lightbulb"></i>,
+        path: "package",
+      },
       {
         name: "Cấu hình hệ thống",
         icon: <i className="fa-solid fa-gear"></i>,
@@ -107,7 +113,7 @@ const SideBar = () => {
           {roleName && renderMenu(menuItems[roleName])}
         </ul>
       </div> */}
-      <div className="drawer lg:drawer-open">
+      <div className="h-full drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
 
         <div className="drawer-side z-10 shadow-lg  rounded-4xl">

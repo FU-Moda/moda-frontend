@@ -106,12 +106,12 @@ export const AdminDashboard = () => {
         </div>
         <div className="mt-8">
           <h2 className="text-xl font-bold mb-4 text-primary">Thống kê</h2>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Chọn khoảng thời gian</span>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Chọn khoảng thời gian</span>
             </label>
             <select
-              class="select select-bordered w-full max-w-xs"
+              className="select select-bordered w-full max-w-xs"
               onChange={(e) => setSelectedChoice(Number(e.target.value))}
             >
               <option selected value={0}>

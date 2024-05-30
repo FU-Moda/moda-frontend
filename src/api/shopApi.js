@@ -4,7 +4,7 @@ import { baseUrl } from "./config";
 export const getAllShop = async (pageNumber, pageSize) => {
   try {
     const data = await axios.get(
-      `${baseUrl}/api/shop/get-all-shop/${pageNumber}/${pageSize}`
+      `${baseUrl}/shop/get-all-shop/${pageNumber}/${pageSize}`
     );
     return data.data;
   } catch (error) {
@@ -14,7 +14,7 @@ export const getAllShop = async (pageNumber, pageSize) => {
 export const getShopByAccountId = async (accountId) => {
   try {
     const data = await axios.get(
-      `${baseUrl}/api/shop/get-shop-by-accountId/${accountId}`
+      `${baseUrl}/shop/get-shop-by-accountId/${accountId}`
     );
     return data.data;
   } catch (error) {
@@ -24,7 +24,7 @@ export const getShopByAccountId = async (accountId) => {
 export const createShopAccount = async (data) => {
   try {
     const response = await axios.post(
-      `${baseUrl}/api/shop/account/create-shop-account/`,
+      `${baseUrl}/shop/account/create-shop-account/`,
       data
     );
     return response.data;
