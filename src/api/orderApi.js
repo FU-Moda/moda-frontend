@@ -37,14 +37,6 @@ export const getAllOrderByAccountId = async (id, pageNumber, pageSize) => {
   } catch (error) {}
 };
 
-export const updateOrderStatus = async (id, status) => {
-  try {
-    const response = await axios.put(
-      `${baseUrl}/order/update-status?orderId=${id}&orderStatus=${status}`
-    );
-    return response.data;
-  } catch (error) {}
-};
 export const getAllOrderDetailsByOrderId = async (id, pageNumber, pageSize) => {
   try {
     const response = await axios.get(
@@ -57,6 +49,22 @@ export const getAllOrder= async ( pageNumber, pageSize) => {
   try {
     const response = await axios.get(
       `${baseUrl}/order/get-all-order/${pageNumber}/${pageSize}`
+    );
+    return response.data;
+  } catch (error) {}
+};
+export const getAllOrderByStatus= async ( status,pageNumber, pageSize) => {
+  try {
+    const response = await axios.get(
+      `${baseUrl}/order/get-all-order-by-status/${pageNumber}/${pageSize}?orderStatus=${status}`
+    );
+    return response.data;
+  } catch (error) {}
+};
+export const updateOrderStatus= async ( orderId) => {
+  try {
+    const response = await axios.put(
+      `${baseUrl}/order/update-status?orderId=${orderId}`
     );
     return response.data;
   } catch (error) {}
