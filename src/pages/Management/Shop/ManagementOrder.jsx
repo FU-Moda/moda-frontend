@@ -8,6 +8,7 @@ import OrderModal from "../Shop/Modal/OrderModal";
 import {
   getShopAffilateByShopId,
   getTotalAffilate,
+  getTotalOrderDetailAffilate,
 } from "../../../api/shopApi";
 import { formatPrice } from "../../../utils/util";
 const { TabPane } = Tabs;
@@ -19,7 +20,7 @@ export const ManagementOrder = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState({});
-  const [affiliates, setAffiliates] = useState([]);
+  const [affiliates, setAffiliates] = useState({});
   const [totalAffiliate, setTotalAffiliate] = useState(0);
   const [activeTab, setActiveTab] = useState(
     localStorage.getItem("activeTab") || "1"
@@ -29,17 +30,9 @@ export const ManagementOrder = () => {
   const fetchData = async (page, size) => {
     setIsLoading(true);
     try {
-      const [orderData, affiliateData] = await Promise.all([
-        getAllOrderByShopId(shop.id, page, size),
-        getShopAffilateByShopId(shop.id, page, size),
-      ]);
-
+      const orderData = await getAllOrderByShopId(shop.id, page, size);
       if (orderData.isSuccess) {
         setOrders(orderData.result?.items);
-        setTotalPage(orderData.result.totalPages);
-      }
-      if (affiliateData.isSuccess) {
-        setAffiliates(affiliateData.result?.items);
         setTotalPage(orderData.result.totalPages);
       }
     } catch (error) {
@@ -96,12 +89,12 @@ export const ManagementOrder = () => {
       className="cursor-pointer"
       onClick={() => handleExpand(affiliate?.order.id)}
     >
-      <td>{affiliate.orderId}</td>
+      <td>{affiliate.order?.id}</td>
       <td>{`${affiliate.order?.account?.firstName} ${affiliate.order?.account?.lastName}`}</td>
       <td>{affiliate.order?.account?.phoneNumber}</td>
       <td>{affiliate.order?.account?.email}</td>
       <td>{orderLabels[affiliate.order?.status]}</td>
-      <td>{new Date(affiliate.orderDate).toLocaleString()}</td>
+      <td>{new Date(affiliate.order?.orderTime).toLocaleString()}</td>
       <td>{formatPrice(affiliate.order?.total)}</td>
       <td>{formatPrice(affiliate.order?.deliveryCost)}</td>
       <td>{formatPrice(affiliate.profit)}</td>
@@ -118,8 +111,12 @@ export const ManagementOrder = () => {
       const startDate = new Date(dates[0]).toISOString();
       const endDate = new Date(dates[1]).toISOString();
       const response = await getTotalAffilate(shop.id, startDate, endDate);
+      const affilateData = await getTotalOrderDetailAffilate(shop.id, startDate, endDate);
       if (response.isSuccess) {
         setTotalAffiliate(response.result);
+      }
+      if (affilateData.isSuccess) {
+        setAffiliates(affilateData.result);
       }
     } catch (error) {
       console.error(error);
@@ -189,6 +186,9 @@ export const ManagementOrder = () => {
           <h2 className="animate-text-animation text-center text-primary font-bold  my-4">
             Tổng số tiền cần phải trả cho MODA: {formatPrice(totalAffiliate)}
           </h2>
+          <h2 className=" text-center text-primary font-bold  my-4">
+            Tổng số tiền lời: {formatPrice(affiliates.totalProfit)}
+          </h2>
           {!isLoading && (
             <div className="overflow-x-auto">
               <table className="table w-full table-zebra">
@@ -206,7 +206,7 @@ export const ManagementOrder = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {affiliates && affiliates.map(renderAffiliateRow)}
+                  {affiliates && affiliates.orderProfitResponses?.map(renderAffiliateRow)}
                 </tbody>
               </table>
             </div>

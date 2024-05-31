@@ -9,7 +9,7 @@ const PaymentMethod = ({ log }) => {
 
   useEffect(() => {
     log(paymentMethod);
-  }, [paymentMethod, log]);
+  }, [paymentMethod]);
 
   return (
     <div className=" shadow-lg rounded-box p-6">

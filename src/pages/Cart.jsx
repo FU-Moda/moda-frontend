@@ -51,7 +51,6 @@ const Cart = () => {
     }
   };
   useEffect(() => {
-    window.scrollTo(0, 0);
     fetchData();
   }, []);
   const checkOut = async () => {
@@ -141,9 +140,9 @@ const Cart = () => {
               <img src={qrPayment} alt="QR Code" className="w-full h-full" />
               <h3 className="text-center text-red-700 font-bold">
                 Số tiền cần phải thanh toán{" "}
-                {formatPrice(
+              {selectedCoupon.percent ? formatPrice(
                   (totalPrice * (100 - selectedCoupon.percent)) / 100
-                )}
+                ) : formatPrice(totalPrice)}  
               </h3>
               <h3 className="text-center text-red-700 font-bold">
                 Nội dung chuyển khoản: Tên tài khoản + Số điện thoại

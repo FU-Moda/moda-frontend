@@ -26,6 +26,7 @@ import AdminSetting from "../pages/Management/Admin/AdminSetting";
 import CreatePackage from "../pages/Management/Admin/Package/CreatePackage";
 import PackageList from "../pages/Management/Admin/Package/PackageList";
 import PackageManagement from "../pages/Management/Staff/PackageManagement";
+import ManagementPackageShop from "../pages/Management/Shop/ManagementPackageShop";
 const ProtectedRouteAuth = ({ children }) => {
   const role = decode(localStorage.getItem("accessToken"));
   if (role !== "isStaff" && role != "isAdmin") {
@@ -222,6 +223,14 @@ function Routers() {
           element: (
             <ProtectedRouteShop>
               <ManagementOrder />
+            </ProtectedRouteShop>
+          ),
+        },
+        {
+          path: "package",
+          element: (
+            <ProtectedRouteShop>
+              <ManagementPackageShop />
             </ProtectedRouteShop>
           ),
         },

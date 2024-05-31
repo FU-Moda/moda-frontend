@@ -27,6 +27,11 @@ const SideBar = () => {
         icon: <i className="fa-solid fa-list"></i>,
         path: "orders",
       },
+      {
+        name: "Gói dịch vụ",
+        icon: <i className="fa-solid fa-lightbulb"></i>,
+        path: "package",
+      },
     ],
     isAdmin: [
       {

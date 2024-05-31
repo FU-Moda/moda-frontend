@@ -94,7 +94,7 @@ export const cartSlice = createSlice({
       state.cartList = [];
     },
     applyCoupon: (state, action) => {
-      if (state.selectedCoupon.couponId === action.payload.couponId) {
+      if (state.selectedCoupon.id == action.payload.id) {
         state.selectedCoupon = {};
       } else {
         state.selectedCoupon = action.payload;

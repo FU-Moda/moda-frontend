@@ -42,6 +42,16 @@ export const getShopAffilateByShopId = async (shopId, pageNumber, pageSize) => {
     console.log(error);
   }
 };
+export const getTotalOrderDetailAffilate = async (shopId, startDate, endDate) => {
+  try {
+    const data = await axios.get(
+      `${baseUrl}/shop/get-total-order-detail-affiliate?shopId=${shopId}&startDate=${startDate}&endDate=${endDate}`
+    );
+    return data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 export const getTotalAffilate = async (shopId, startDate, endDate) => {
   try {
     const data = await axios.get(
@@ -62,3 +72,14 @@ export const getShopPackageByStatus = async (pageNumber, pageSize, status) => {
     console.log(error);
   }
 };
+export const checkShopPackageSubscription = async (shopId) => {
+  try {
+    const data = await axios.get(
+      `${baseUrl}/shop/check-shop-package-subscription/${shopId}`
+    );
+    return data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+

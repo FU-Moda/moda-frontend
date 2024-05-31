@@ -9,6 +9,8 @@ import { formatDateTime, formatPrice } from "../../utils/util";
 import { clothingSizeLabels, shoeSizeLabels } from "../../utils/constant";
 import PersonalModal from "./Account/PersonalModal";
 import PricingOptions from "../Management/Shop/PricingOptions";
+import { checkShopPackageSubscription } from "../../api/shopApi";
+import PricingOption from "../../components/PricingOption/PricingOption";
 const PersonalInformation = () => {
   const { user } = useSelector((state) => state.user || {});
   const shop = useSelector((state) => state.shop.shop || {});
@@ -17,7 +19,7 @@ const PersonalInformation = () => {
   const [orderDetailId, setOrderDetailId] = useState(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isPricingOpen, setIsPricingOpen] = useState(false);
-
+  const [packages, setPackages] = useState({});
   const [data, setData] = useState({});
   const userMap = {
     name: `${user.firstName} ${user.lastName}`,
@@ -32,8 +34,15 @@ const PersonalInformation = () => {
       console.log(data.result.items);
     }
   };
+  const fetchPackages = async () => {
+    const data = await checkShopPackageSubscription(shop.id);
+    if (data.isSuccess) {
+      setPackages(data.result);
+    }
+  };
   useEffect(() => {
     fetchOrders();
+    fetchPackages();
   }, [user]);
   const fetchOrderDetails = async () => {
     const data = await getAllOrderDetailsByOrderId(orderDetailId, 1, 100);
@@ -125,14 +134,6 @@ const PersonalInformation = () => {
                   </table>
                 </div>
               )}
-              <div>
-                {shop.id && (
-                  <PricingOptions
-                    isModalVisible={isPricingOpen}
-                    setIsModalVisible={() => setIsPricingOpen(!isPricingOpen)}
-                  />
-                )}
-              </div>
             </div>
           </>
         ) : (
@@ -229,6 +230,29 @@ const PersonalInformation = () => {
             onClose={() => setIsUpdateModalOpen(!isUpdateModalOpen)}
           />
         )}
+      </div>
+      <div className="grid grid-cols-1 mt-8">
+        <h1 className=" text-primary text-xl font-bold">
+          {" "}
+          Gói dịch vụ đã đăng kí tại MODA
+        </h1>
+        <div>
+          {shop.id && !packages.optionPackageId && (
+            <PricingOptions
+              isModalVisible={isPricingOpen}
+              setIsModalVisible={() => setIsPricingOpen(!isPricingOpen)}
+            />
+          )}
+        </div>
+        <PricingOption
+          title={packages.packageName}
+          description={packages.description}
+          price={formatPrice(packages.packagePrice)}
+          isBannerAvailable={packages.isBannerAvailable}
+          isDashboardAvailable={packages.isDashboardAvailable}
+          status={packages.status}
+          isUsed={true}
+        />
       </div>
     </div>
   );

@@ -7,8 +7,6 @@ const CouponList = ({ items }) => {
   const selectedCoupon = useSelector(
     (state) => state.cart.selectedCoupon || {}
   );
-  console.log(selectedCoupon);
-  console.log(items);
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -21,7 +19,7 @@ const CouponList = ({ items }) => {
               onClick={() =>
                 dispatch(
                   applyCoupon({
-                    couponId: coupon.id,
+                    id: coupon.id,
                     percent: coupon.percent,
                     conditionAmount: coupon.conditionAmount,
                     code: coupon.code,
@@ -31,7 +29,7 @@ const CouponList = ({ items }) => {
                 )
               }
             >
-              {selectedCoupon.couponId === coupon.id && (
+              {selectedCoupon.id === coupon.id && (
                 <div className="absolute top-0 right-0  bg-green-600 text-white px-2 py-1 rounded-bl-lg shadow-lg">
                   Áp dụng
                 </div>
