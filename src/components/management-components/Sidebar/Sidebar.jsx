@@ -68,7 +68,7 @@ const SideBar = () => {
         path: "shop",
       },
       {
-        name: "Kiểm duyệt sản phẩm",
+        name: "Sản phẩm",
         icon: <i className="fa-solid fa-shirt"></i>,
         path: "product",
       },
@@ -76,6 +76,11 @@ const SideBar = () => {
         name: "Gói dịch vụ",
         icon: <i className="fa-solid fa-box-open"></i>,
         path: "package",
+      },
+      {
+        name: "Đơn hàng",
+        icon: <i className="fa-solid fa-bag-shopping"></i>,
+        path: "order",
       },
     ],
   };

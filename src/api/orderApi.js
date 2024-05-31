@@ -53,3 +53,11 @@ export const getAllOrderDetailsByOrderId = async (id, pageNumber, pageSize) => {
     return response.data;
   } catch (error) {}
 };
+export const getAllOrder= async ( pageNumber, pageSize) => {
+  try {
+    const response = await axios.get(
+      `${baseUrl}/order/get-all-order/${pageNumber}/${pageSize}`
+    );
+    return response.data;
+  } catch (error) {}
+};

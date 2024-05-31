@@ -18,7 +18,7 @@ const PackageManagement = () => {
 
     fetchData();
   }, [status]);
-
+console.log(data)
   const handleConfirm = (record) => {
     message.success(
       `Confirmed package ${record.optionPackageHistory.optionPackage.packageName}`
@@ -49,10 +49,14 @@ const PackageManagement = () => {
       key: "packagePrice",
       render: (text) => <span>{formatPrice(text)}</span>,
     },
-    {
+    
+  ];
+  
+  if (data.some(item => item.shopPackageStatus === 0)) {
+    columns.push({
       title: "Hành động",
       key: "action",
-      render: (text, record) => (
+      render: (record) => (
         <span>
           <Popconfirm
             title="Are you sure to confirm this package?"
@@ -72,9 +76,10 @@ const PackageManagement = () => {
           </Popconfirm>
         </span>
       ),
-    },
-  ];
+    });
+  }
 
+    
   return (
     <>
       <h1 className="text-center text-primary font-bold text-2xl uppercase my-4">

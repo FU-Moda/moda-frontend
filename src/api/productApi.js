@@ -11,6 +11,16 @@ const getAllProduct = async (pageNumber, pageSize) => {
     console.log(error);
   }
 };
+const getProductByStatus = async (productStatus,pageNumber, pageSize) => {
+  try {
+    const data = await axios.get(
+      `${baseUrl}/product/get-product-by-status/${pageNumber}/${pageSize}?productStatus=${productStatus}`
+    );
+    return data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 const getAllProductByFilter = async (pageNumber, pageSize, data) => {
   try {
     const response = await axios.post(
@@ -48,7 +58,14 @@ const getRatingByProductId = async (id, pageNumber, pageSize) => {
     return data.data;
   } catch (error) {}
 };
-
+const updateProductStatus = async (id,status) => {
+  try {
+    const data = await axios.post(
+      `${baseUrl}/product/update-product-status/${id}?productStatus=${status}`
+    );
+    return data.data;
+  } catch (error) {}
+};
 const getShopById = async (id) => {
   try {
     const data = await axios.get(`${baseUrl}/shop/get-shop-by-id/${id}`);
@@ -88,4 +105,6 @@ export {
   getProductByShopId,
   getProductStockByProductId,
   addNewProduct,
+  getProductByStatus,
+  updateProductStatus
 };

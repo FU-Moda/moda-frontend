@@ -62,7 +62,7 @@ const PricingOptions = ({ isModalVisible, setIsModalVisible }) => {
         onCancel={handleCancel}
         width={900}
       >
-        <div className="flex justify-center gap-8 my-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 my-8">
           {options.map((option, index) => (
             <PricingOption
               key={index}

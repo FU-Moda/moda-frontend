@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../app/features/cart/cartSlice";
 import { formatPrice } from "../../utils/util";
+import PurchaseSteps from "../Guide/PurchaseSteps";
 
 const ProductCard = ({ title, productItem }) => {
   const dispatch = useDispatch();
@@ -49,6 +50,10 @@ const ProductCard = ({ title, productItem }) => {
               class="fa-solid fa-star text-yellow-300 text-base"
             ></i>
           ))}
+        
+        </div>
+        <div className="flex justify-end">
+        <PurchaseSteps/>
         </div>
         <div className="flex flex-col flex-wrap  md:flex-row justify-between items-center my-2">
           <h4 className="font-bold text-red-600">
