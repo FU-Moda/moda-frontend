@@ -80,7 +80,7 @@ const Cart = () => {
         const response = await createOrderCOD({
           accountId: user.id,
           productStockDtos,
-          couponId: selectedCoupon,
+          couponId: selectedCoupon.id,
         });
         if (response.isSuccess) {
           toast.success("Đặt hàng thành công");
