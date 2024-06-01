@@ -18,7 +18,7 @@ const PackageManagement = () => {
 
     fetchData();
   }, [status]);
-console.log(data)
+  console.log(data);
   const handleConfirm = (record) => {
     message.success(
       `Confirmed package ${record.optionPackageHistory.optionPackage.packageName}`
@@ -49,10 +49,9 @@ console.log(data)
       key: "packagePrice",
       render: (text) => <span>{formatPrice(text)}</span>,
     },
-    
   ];
-  
-  if (data.some(item => item.shopPackageStatus === 0)) {
+
+  if (data.some((item) => item.shopPackageStatus === 0)) {
     columns.push({
       title: "Hành động",
       key: "action",
@@ -79,7 +78,6 @@ console.log(data)
     });
   }
 
-    
   return (
     <>
       <h1 className="text-center text-primary font-bold text-2xl uppercase my-4">
@@ -90,32 +88,40 @@ console.log(data)
         onChange={(key) => setStatus(parseInt(key, 10))}
       >
         <TabPane tab="Đợi xác nhận" key="0">
-          <Table
-            columns={columns}
-            dataSource={data.filter((item) => item.shopPackageStatus === 0)}
-            rowKey="id"
-          />
+          <div className="overflow-x-auto">
+            <Table
+              columns={columns}
+              dataSource={data.filter((item) => item.shopPackageStatus === 0)}
+              rowKey="id"
+            />
+          </div>
         </TabPane>
         <TabPane tab="Thành công" key="1">
-          <Table
-            columns={columns}
-            dataSource={data.filter((item) => item.shopPackageStatus === 1)}
-            rowKey="id"
-          />
+          <div className="overflow-x-auto">
+            <Table
+              columns={columns}
+              dataSource={data.filter((item) => item.shopPackageStatus === 1)}
+              rowKey="id"
+            />
+          </div>
         </TabPane>
         <TabPane tab="Thất bại" key="2">
-          <Table
-            columns={columns}
-            dataSource={data.filter((item) => item.shopPackageStatus === 2)}
-            rowKey="id"
-          />
+          <div className="overflow-x-auto">
+            <Table
+              columns={columns}
+              dataSource={data.filter((item) => item.shopPackageStatus === 2)}
+              rowKey="id"
+            />
+          </div>
         </TabPane>
         <TabPane tab="Hoàn lại" key="3">
-          <Table
-            columns={columns}
-            dataSource={data.filter((item) => item.shopPackageStatus === 3)}
-            rowKey="id"
-          />
+          <div className="overflow-x-auto">
+            <Table
+              columns={columns}
+              dataSource={data.filter((item) => item.shopPackageStatus === 3)}
+              rowKey="id"
+            />
+          </div>
         </TabPane>
       </Tabs>
     </>

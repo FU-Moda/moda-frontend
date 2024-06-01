@@ -70,7 +70,7 @@ const OrderManagementStaff = () => {
               type="primary"
               onClick={() => handleupdateOrderStatus(record.id)}
             >
-              Confirm
+              Xác nhận
             </Button>
           )}
         </div>
@@ -88,7 +88,9 @@ const OrderManagementStaff = () => {
         <TabPane tab="Chuyển cho Shop" key="1" />
         <TabPane tab="Chuyển cho Giao hàng" key="2" />
       </Tabs>
-      <Table columns={columns} dataSource={orderList} rowKey="id" />
+      <div className="overflow-x-auto">
+        <Table columns={columns} dataSource={orderList} rowKey="id" />
+      </div>
     </div>
   );
 };

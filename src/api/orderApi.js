@@ -69,3 +69,11 @@ export const updateOrderStatus= async ( orderId) => {
     return response.data;
   } catch (error) {}
 };
+export const getAllOrderByStusAndShopId= async (shopId, pageNumber,pageSize,status) => {
+  try {
+    const response = await axios.get(
+      `${baseUrl}/order/get-shop-order-by-status/${shopId}/${pageNumber}/${pageSize}?orderStatus=${status}`
+    );
+    return response.data;
+  } catch (error) {}
+};

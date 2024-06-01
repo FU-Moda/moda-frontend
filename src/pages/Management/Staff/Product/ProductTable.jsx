@@ -3,8 +3,10 @@ import { Table, Image, Button } from "antd";
 import { updateProductStatus } from "../../../../api/productApi";
 import { toast } from "react-toastify";
 
-const ProductTable = ({ products,fetchData }) => {
-    const hasPendingProduct = products.some(product => product.product.status === 0);
+const ProductTable = ({ products, fetchData }) => {
+  const hasPendingProduct = products.some(
+    (product) => product.product.status === 0
+  );
 
   const handleUpdateStatus = async (id, status) => {
     try {
@@ -62,7 +64,6 @@ const ProductTable = ({ products,fetchData }) => {
           </div>
         )),
     },
-  
   ];
   if (hasPendingProduct) {
     columns.push({

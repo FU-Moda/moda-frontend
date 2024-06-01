@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
-import { Tabs, DatePicker, Pagination } from "antd";
+import { Tabs, DatePicker, Pagination, message, Tooltip } from "antd";
 import { useSelector } from "react-redux";
-import { getAllOrderByShopId } from "../../../api/orderApi";
+import {
+  getAllOrderByShopId,
+  getAllOrderByStusAndShopId,
+  updateOrderStatus,
+} from "../../../api/orderApi";
 import LoadingComponent from "../../../components/LoadingComponent/LoadingComponent";
 import { orderLabels } from "../../../utils/constant";
 import OrderModal from "../Shop/Modal/OrderModal";
@@ -19,18 +23,26 @@ export const ManagementOrder = () => {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState({});
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const [affiliates, setAffiliates] = useState({});
   const [totalAffiliate, setTotalAffiliate] = useState(0);
   const [activeTab, setActiveTab] = useState(
     localStorage.getItem("activeTab") || "1"
+  );
+  const [activeChildTab, setActiveChildTab] = useState(
+    localStorage.getItem("activeChildTab") || "1"
   );
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const fetchData = async (page, size) => {
     setIsLoading(true);
     try {
-      const orderData = await getAllOrderByShopId(shop.id, page, size);
+      const orderData = await getAllOrderByStusAndShopId(
+        shop.id,
+        page,
+        size,
+        activeChildTab
+      );
       if (orderData.isSuccess) {
         setOrders(orderData.result?.items);
         setTotalPage(orderData.result.totalPages);
@@ -49,37 +61,56 @@ export const ManagementOrder = () => {
     fetchData(page, pageSize);
   };
   const handleExpand = (orderId) => {
-    const selectedOrder = orders.find((order) => order.order.id === orderId);
-    setSelectedOrder(selectedOrder);
+    setSelectedOrder(orderId);
     setIsOpen(true);
   };
 
   const handleModalClose = () => {
     setIsOpen(false);
   };
-
+  const handleUpdateStatus = async (orderId) => {
+    try {
+      const response = await updateOrderStatus(orderId);
+      if (response.isSuccess) {
+        message.success("Order status updated successfully");
+        fetchData(); // Gọi lại hàm fetchData để cập nhật dữ liệu
+      } else {
+        message.error("Failed to update order status");
+      }
+    } catch (error) {
+      message.error("An error occurred while updating order status");
+    }
+  };
   const renderOrderRow = (order) => (
-    <tr
-      key={order.order.id}
-      className="cursor-pointer"
-      onClick={() => handleExpand(order.order.id)}
-    >
-      <td>{order.order.id}</td>
-      <td>{`${order.order?.account?.firstName} ${order.order?.account?.lastName}`}</td>
-      <td>{order.order?.account?.phoneNumber}</td>
-      <td>{order.order?.account?.email}</td>
+    <tr key={order.id} className="cursor-pointer">
+      <td>{order.id}</td>
+      <td>{`${order?.account?.firstName} ${order?.account?.lastName}`}</td>
+      <td>{order?.account?.phoneNumber}</td>
+      <td>{order?.account?.email}</td>
 
-      <td>{new Date(order.order.orderTime).toLocaleString()}</td>
-      <td>{orderLabels[order.order?.status]}</td>
-      <td>{formatPrice(order.order?.total)}</td>
-      <td>{formatPrice(order.order?.deliveryCost)}</td>
+      <td>{new Date(order.orderTime).toLocaleString()}</td>
+      <td>{orderLabels[order?.status]}</td>
+      <td>{formatPrice(order?.total)}</td>
+      <td>{formatPrice(order?.deliveryCost)}</td>
       <td>
-        <button
-          className="btn bg-primary text-white"
-          onClick={() => handleExpand(order)}
+        <Tooltip
+          title={
+            order.status === 1
+              ? "Đã chuẩn bị hàng xong"
+              : "Đã giao hàng thành công"
+          }
         >
-          Chi tiết
-        </button>
+          <i
+            className="fas fa-check-circle text-green-500 cursor-pointer"
+            onClick={() => handleUpdateStatus(order.id)}
+          />
+        </Tooltip>
+        <Tooltip title="Xem chi tiết">
+          <i
+            className="mx-6 fa-solid fa-eye cursor-pointer"
+            onClick={() => handleExpand(order.id)}
+          ></i>
+        </Tooltip>
       </td>
     </tr>
   );
@@ -111,7 +142,11 @@ export const ManagementOrder = () => {
       const startDate = new Date(dates[0]).toISOString();
       const endDate = new Date(dates[1]).toISOString();
       const response = await getTotalAffilate(shop.id, startDate, endDate);
-      const affilateData = await getTotalOrderDetailAffilate(shop.id, startDate, endDate);
+      const affilateData = await getTotalOrderDetailAffilate(
+        shop.id,
+        startDate,
+        endDate
+      );
       if (response.isSuccess) {
         setTotalAffiliate(response.result);
       }
@@ -128,13 +163,17 @@ export const ManagementOrder = () => {
     setActiveTab(key);
     localStorage.setItem("activeTab", key);
   };
+  const handleTabChildChange = (key) => {
+    setActiveChildTab(key);
+    localStorage.setItem("activeChildTab", key);
+  };
   useEffect(() => {
     fetchData(currentPage, pageSize);
     handleDateChange([
       moment().utcOffset(420).subtract(1, "months").toDate(),
       moment().utcOffset(420).toDate(),
     ]);
-  }, [shop]);
+  }, [shop, activeChildTab, currentPage, pageSize, activeTab]);
   return (
     <>
       <Tabs defaultActiveKey={activeTab} onChange={handleTabChange}>
@@ -143,26 +182,49 @@ export const ManagementOrder = () => {
           <h1 className="text-center text-primary font-bold text-2xl uppercase my-4">
             Quản lý đơn hàng
           </h1>
-          {!isLoading && (
-            <div className="overflow-x-auto">
-              <table className="table w-full table-zebra">
-                <thead>
-                  <tr>
-                    <th>Đơn hàng</th>
-                    <th>Tên khách hàng</th>
-                    <th>Số điện thoại</th>
-                    <th>Email</th>
-                    <th>Ngày đặt hàng</th>
-                    <th>Trạng thái</th>
-                    <th>Tổng cộng</th>
-                    <th>Phí giao hàng</th>
-                    <th>Chi tiết</th>
-                  </tr>
-                </thead>
-                <tbody>{orders && orders.map(renderOrderRow)}</tbody>
-              </table>
-            </div>
-          )}
+          <Tabs defaultActiveKey="1" onChange={handleTabChildChange}>
+            <TabPane tab="Chuyển cho Shop" key="1">
+              <div className="overflow-x-auto">
+                <table className="table w-full table-zebra">
+                  <thead>
+                    <tr>
+                      <th>Đơn hàng</th>
+                      <th>Tên khách hàng</th>
+                      <th>Số điện thoại</th>
+                      <th>Email</th>
+                      <th>Ngày đặt hàng</th>
+                      <th>Trạng thái</th>
+                      <th>Tổng cộng</th>
+                      <th>Phí giao hàng</th>
+                      <th>Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody>{orders && orders.map(renderOrderRow)}</tbody>
+                </table>
+              </div>
+            </TabPane>
+            <TabPane tab="Chuyển cho Giao hàng" key="2">
+              <div className="overflow-x-auto">
+                <table className="table w-full table-zebra">
+                  <thead>
+                    <tr>
+                      <th>Đơn hàng</th>
+                      <th>Tên khách hàng</th>
+                      <th>Số điện thoại</th>
+                      <th>Email</th>
+                      <th>Ngày đặt hàng</th>
+                      <th>Trạng thái</th>
+                      <th>Tổng cộng</th>
+                      <th>Phí giao hàng</th>
+                      <th>Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody>{orders && orders.map(renderOrderRow)}</tbody>
+                </table>
+              </div>
+            </TabPane>
+          </Tabs>
+
           <Pagination
             current={currentPage}
             pageSize={pageSize}
@@ -206,7 +268,8 @@ export const ManagementOrder = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {affiliates && affiliates.orderProfitResponses?.map(renderAffiliateRow)}
+                  {affiliates &&
+                    affiliates.orderProfitResponses?.map(renderAffiliateRow)}
                 </tbody>
               </table>
             </div>

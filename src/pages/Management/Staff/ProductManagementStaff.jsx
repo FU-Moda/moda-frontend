@@ -41,7 +41,9 @@ const ProductManagementStaff = () => {
         <TabPane tab="Đã duyệt" key="1" />
         <TabPane tab="Từ chối" key="2" />
       </Tabs>
-      <ProductTable products={products} fetchData={fetchData} />
+      <div className="overflow-x-auto">
+        <ProductTable products={products} fetchData={fetchData} />
+      </div>
     </div>
   );
 };
