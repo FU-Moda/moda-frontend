@@ -124,8 +124,8 @@ export const ManagementOrder = () => {
       <td>{`${affiliate.order?.account?.firstName} ${affiliate.order?.account?.lastName}`}</td>
       <td>{affiliate.order?.account?.phoneNumber}</td>
       <td>{affiliate.order?.account?.email}</td>
-      <td>{orderLabels[affiliate.order?.status]}</td>
       <td>{new Date(affiliate.order?.orderTime).toLocaleString()}</td>
+      <td>{orderLabels[affiliate.order?.status]}</td>
       <td>{formatPrice(affiliate.order?.total)}</td>
       <td>{formatPrice(affiliate.order?.deliveryCost)}</td>
       <td>{formatPrice(affiliate.profit)}</td>
