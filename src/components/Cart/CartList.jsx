@@ -5,6 +5,11 @@ import {
   orderLabels,
   shoeSizeLabels,
 } from "../../utils/constant";
+import {
+  addToCart,
+  decreaseQty,
+  deleteProduct,
+} from "../../redux/features/cartSlice";
 const CartList = ({ cartList, dispatch }) => {
   return (
     <div className="md:col-span-3">
