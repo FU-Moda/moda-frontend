@@ -11,16 +11,18 @@ import PersonalModal from "./Account/PersonalModal";
 import PricingOptions from "../Management/Shop/PricingOptions";
 import { checkShopPackageSubscription } from "../../api/shopApi";
 import PricingOption from "../../components/PricingOption/PricingOption";
+import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
 const PersonalInformation = () => {
   const { user } = useSelector((state) => state.user || {});
+  const { role } = useSelector((state) => state.user || {});
   const shop = useSelector((state) => state.shop.shop || {});
   const [orders, setOrders] = useState([]);
   const [isOrderDetail, setIsOrderDetail] = useState(false);
-  const [orderDetailId, setOrderDetailId] = useState(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isPricingOpen, setIsPricingOpen] = useState(false);
   const [packages, setPackages] = useState({});
   const [data, setData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const userMap = {
     name: `${user.firstName} ${user.lastName}`,
     email: `${user.email}`,
@@ -28,37 +30,56 @@ const PersonalInformation = () => {
     address: `${user.address}`,
   };
   const fetchOrders = async () => {
-    const data = await getAllOrderByAccountId(user.id, 1, 100);
-    if (data.isSuccess) {
-      setOrders(data.result.items);
-      console.log(data.result.items);
+    try {
+      setIsLoading(true);
+      const data = await getAllOrderByAccountId(user.id, 1, 100);
+      if (data.isSuccess) {
+        setOrders(data.result.items);
+        console.log(data.result.items);
+      }
+    } catch (error) {
+      message.error("An error occurred while fetching orders");
+    } finally {
+      setIsLoading(false);
     }
   };
   const fetchPackages = async () => {
-    const data = await checkShopPackageSubscription(shop.id);
-    if (data.isSuccess) {
-      setPackages(data.result);
+    try {
+      setIsLoading(true);
+      const data = await checkShopPackageSubscription(shop.id);
+      if (data.isSuccess) {
+        setPackages(data.result);
+      }
+    } catch (error) {
+      message.error("An error occurred while fetching orders");
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
     fetchOrders();
     fetchPackages();
   }, [user]);
-  const fetchOrderDetails = async () => {
-    const data = await getAllOrderDetailsByOrderId(orderDetailId, 1, 100);
-    if (data.isSuccess) {
-      setData(data.result);
+  const fetchOrderDetails = async (id) => {
+    try {
+      setIsLoading(true);
+      const data = await getAllOrderDetailsByOrderId(id, 1, 100);
+      if (data.isSuccess) {
+        setData(data.result);
+      }
+    } catch (error) {
+      message.error("An error occurred while fetching order details");
+    } finally {
+      setIsLoading(false);
     }
   };
-  useEffect(() => {
-    fetchOrderDetails();
-  }, [isOrderDetail, orderDetailId]);
+
   const handleClick = (item) => {
-    setOrderDetailId(item.id);
     setIsOrderDetail(true);
+    fetchOrderDetails(item.id);
   };
-  const renderOrderItems = (order) => {
-    return orders.map((item) => (
+  const renderOrderItems = (item) => {
+    return (
       <tr
         key={item.id}
         className="cursor-pointer"
@@ -66,16 +87,17 @@ const PersonalInformation = () => {
       >
         <td>{item.id}</td>
         <td>{item.address}</td>
-        <td>{orderLabels[order.status]}</td>
-        <td>{formatPrice(order.total)}</td>
-        <td>{formatPrice(order.deliveryCost)}</td>
-        <td>{formatDateTime(order.orderTime)}</td>
+        <td>{orderLabels[item.status]}</td>
+        <td>{formatPrice(item.total)}</td>
+        <td>{formatPrice(item.deliveryCost)}</td>
+        <td>{formatDateTime(item.orderTime)}</td>
       </tr>
-    ));
+    );
   };
   console.log("shop", shop);
   return (
     <div className="container mx-auto py-8">
+      <LoadingComponent isLoading={isLoading} />
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="col-span-1 bg-white shadow-md rounded-box p-6">
           <div className="flex justify-between">
@@ -231,29 +253,31 @@ const PersonalInformation = () => {
           />
         )}
       </div>
-      <div className="grid grid-cols-1 mt-8">
-        <h1 className=" text-primary text-xl font-bold">
-          {" "}
-          Gói dịch vụ đã đăng kí tại MODA
-        </h1>
-        <div>
-          {shop.id && !packages.optionPackageId && (
-            <PricingOptions
-              isModalVisible={isPricingOpen}
-              setIsModalVisible={() => setIsPricingOpen(!isPricingOpen)}
-            />
-          )}
+      {role === "isShop" && (
+        <div className="grid grid-cols-1 mt-8">
+          <h1 className=" text-primary text-xl font-bold">
+            {" "}
+            Gói dịch vụ đã đăng kí tại MODA
+          </h1>
+          <div>
+            {shop.id && !packages.optionPackageId && (
+              <PricingOptions
+                isModalVisible={isPricingOpen}
+                setIsModalVisible={() => setIsPricingOpen(!isPricingOpen)}
+              />
+            )}
+          </div>
+          <PricingOption
+            title={packages.packageName}
+            description={packages.description}
+            price={formatPrice(packages.packagePrice)}
+            isBannerAvailable={packages.isBannerAvailable}
+            isDashboardAvailable={packages.isDashboardAvailable}
+            status={packages.status}
+            isUsed={true}
+          />
         </div>
-        <PricingOption
-          title={packages.packageName}
-          description={packages.description}
-          price={formatPrice(packages.packagePrice)}
-          isBannerAvailable={packages.isBannerAvailable}
-          isDashboardAvailable={packages.isDashboardAvailable}
-          status={packages.status}
-          isUsed={true}
-        />
-      </div>
+      )}
     </div>
   );
 };
